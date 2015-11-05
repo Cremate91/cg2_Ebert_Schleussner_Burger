@@ -83,7 +83,7 @@ define(["util", "Scene"],
                 // trigger the actual drawing
                 if(this.drawStyle.fill) {
                     context.fill();
-                };
+                }
                 context.stroke();
             };
 
@@ -114,7 +114,6 @@ define(["util", "Scene"],
                 this.setPos(dragEvent);
 
             };
-
 
         };
 

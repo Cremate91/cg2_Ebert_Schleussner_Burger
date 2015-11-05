@@ -42,7 +42,7 @@ define(["util", "vec2", "Scene"],
              */
             this.draw = function(context) {
 
-                //context.rect(xmin,ymin,xmax-xmin,ymax-ymin);
+                context.rect(this.xmin,this.ymin,this.xmax-this.xmin,this.ymax-this.ymin);
 
                 // draw actual line
                 context.beginPath();

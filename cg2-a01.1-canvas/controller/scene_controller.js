@@ -37,7 +37,7 @@
 
 /* requireJS module definition */
 define(["util", "Scene"],
-    (function(util,scene) {
+    (function(util,Scene) {
 
         "use strict";
 
@@ -112,8 +112,8 @@ define(["util", "Scene"],
              */
             this.select = function(obj) {
 
-                if(!obj) {
-                    throw new "SceneController.select(): no object provided";
+                if (!obj) {
+                    throw new function(){console.log("SceneController.select(): no object provided");};
                 }
 
                 // let the object create its draggers
@@ -241,7 +241,7 @@ define(["util", "Scene"],
 
                     // redraw the scene
                     this.scene.draw(this.context);
-                    return;
+
 
                 } else {
 

@@ -27,13 +27,16 @@ requirejs.config({
 
         "Scene" : "./scene/scene",
         "Line" : "./scene/line",
-        "Circle": "./scene/circle",
-        "Point": "./scene/point",
-        "KdTree":"./kdtree/kdtree",
-        "kdutil":"./kdtree/kdutil",
-        "BoundingBox":"./kdtree/boundingbox",
-        "KdNode":"./kdtree/kdnode",
+        "Circle" : "./scene/circle",
+        "Point" : "./scene/point",
         "PointDragger" : "./scene/point_dragger",
+        "Controlpolygon" : "./scene/controlpolygon",
+        "KdTree" : "./kdtree/kdtree",
+        "kdutil" : "./kdtree/kdutil",
+        "BoundingBox" : "./kdtree/boundingbox",
+        "KdNode" : "./kdtree/kdnode",
+        "ParametricCurve" : "./scene/ParametricCurve",
+        "BezierCurve" : "./scene/BezierCurve",
 
         "vec2" : "./math/vec2",
 

@@ -10,7 +10,7 @@
 
 /* requireJS module definition */
 define(["kdutil", "vec2", "Scene", "KdNode", "BoundingBox"],
-    (function(KdUtil, vec2, Scene, KdNode, BoundingBox) {
+    function (KdUtil, vec2, Scene, KdNode, BoundingBox) {
 
         "use strict";
 
@@ -31,35 +31,66 @@ define(["kdutil", "vec2", "Scene", "KdNode", "BoundingBox"],
              * @param isLeft    - flag if node is left or right child of its parent
              * @returns returns root node after tree is build
              */
-            this.build = function(pointList, dim, parent, isLeft) {
+            this.build = function (pointList, dim, parent, isLeft) {
 
+                //console.log(pointList.length);
                 // IMPLEMENT!
                 // create new node
-                var node = new KdNode(dim);
-                // find median position in pointList
-                var mediaPos = kdutil.median(pointList,dim);
+                if (pointList.length > 0) {
+                    var node = new KdNode(dim);
+                    //console.log("node erstellt..")
+                } else {
+                    return null;
+                }
+
+                // find posInArray position in pointList
+                var posInArray = KdUtil.median(pointList, dim);
+
                 // compute next axis
                 var nextDim = (dim === 0) ? 1 : 0;
+
                 // set point in node
-                node.point = mediaPos;
+                node.point = pointList[posInArray];
+
                 // compute bounding box for node
                 // check if node is root (has no parent)
-                // 
-                // take a look in findNearestNeighbor why we 
+                //
+                // take a look in findNearestNeighbor why we
                 // need this bounding box!
-                if( !parent ) {
+                if (!parent) {
                     // Note: hardcoded canvas size here
-                    var bbox = new BoundingBox(0,0,500,400,node.point, dim);
+                    node.bbox = new BoundingBox(0, 0, 500, 400, node.point, dim);
                 } else {
                     // create bounding box and distinguish between axis and
                     // which side (left/right) the node is on
+                    if (dim == 1) {
+                        if (isLeft) {
+                            node.bbox = new BoundingBox(parent.bbox.xmin, parent.bbox.ymin, parent.point.center[0], parent.bbox.ymax, node.point, dim);
+                            //console.log("dim: 1, links, waagerecht");
+                        } else {
+                            node.bbox = new BoundingBox(parent.point.center[0], parent.bbox.ymin, parent.bbox.xmax, parent.bbox.ymax, node.point, dim);
+                            //console.log("dim: 1, rechts, waagerecht");
+                        }
+                    } else {
+                        if (isLeft) {
+                            node.bbox = new BoundingBox(parent.bbox.xmin, parent.bbox.ymin, parent.bbox.xmax, parent.point.center[1], node.point, dim);
+                            //console.log("dim: 0, links, senkrecht");
+                        } else {
+                            node.bbox = new BoundingBox(parent.bbox.xmin, parent.point.center[1], parent.bbox.xmax, parent.bbox.ymax, node.point, dim);
+                            //console.log("dim: 0, rechts, senkrecht");
+                        }
+                    }
 
                 }
 
                 // create point list left/right and
                 // call build for left/right arrays
-                
-                // return root node
+                var leftPoints = pointList.slice(0, posInArray);
+                var rightPoints = pointList.slice(posInArray + 1, pointList.length);
+
+                node.leftChild = this.build(leftPoints, nextDim, node, true);
+                node.rightChild = this.build(rightPoints, nextDim, node, false);
+                return node;
             };
 
             /**
@@ -73,9 +104,9 @@ define(["kdutil", "vec2", "Scene", "KdNode", "BoundingBox"],
              * @param dim - current axis (x or y)
              * @returns closest tree node to query node
              */
-            this.findNearestNeighbor = function(node, query, nearestDistance, currentBest, dim) {
+            this.findNearestNeighbor = function (node, query, nearestDistance, currentBest, dim) {
 
-                if( !node ) {
+                if (!node) {
                     return currentBest;
                 }
 
@@ -83,14 +114,14 @@ define(["kdutil", "vec2", "Scene", "KdNode", "BoundingBox"],
                 var closestDistance = nearestDistance;
 
                 var dist = KdUtil.distance(node.point.center, query.center);
-                if( dist < nearestDistance ) {
+                if (dist < nearestDistance) {
                     closestDistance = dist;
                     closest = node;
                 }
 
                 var first, second;
                 if (dim == 0) {
-                    if ( query.center[0] < node.point.center[0]) {
+                    if (query.center[0] < node.point.center[0]) {
                         first = node.leftChild;
                         second = node.rightChild;
                     } else {
@@ -108,12 +139,12 @@ define(["kdutil", "vec2", "Scene", "KdNode", "BoundingBox"],
                 }
 
                 var nextDim = (dim === 0) ? 1 : 0;
-                if( first && first.bbox.distanceTo(query.center) < closestDistance) {
+                if (first && first.bbox.distanceTo(query.center) < closestDistance) {
                     closest = this.findNearestNeighbor(first, query, closestDistance, closest, nextDim);
                     closestDistance = KdUtil.distance(closest.point.center, query.center);
                 }
 
-                if( second && second.bbox.distanceTo(query.center) < closestDistance) {
+                if (second && second.bbox.distanceTo(query.center) < closestDistance) {
                     closest = this.findNearestNeighbor(second, query, closestDistance, closest, nextDim);
                 }
 
@@ -121,7 +152,8 @@ define(["kdutil", "vec2", "Scene", "KdNode", "BoundingBox"],
             };
 
 
-            //
+
+            //console.log("erst rootbuild");
             this.root = this.build(pointList, 0);
             console.log(" this is the root: ", this.root);
 
@@ -130,6 +162,6 @@ define(["kdutil", "vec2", "Scene", "KdNode", "BoundingBox"],
         return KdTree;
 
 
-    })); // define
+    }); // define
 
 

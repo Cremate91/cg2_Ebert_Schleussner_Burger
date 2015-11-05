@@ -34,7 +34,7 @@ define(["util", "vec2", "Scene", "PointDragger"],
             point0[0] + "," + point0[1] + "] to [" +
             point1[0] + "," + point1[1] + "].");
 
-            // draw style for drawing the line
+            // draw lineStyle for drawing the line
             this.lineStyle = lineStyle || { width: "2", color: "#0000AA" };
 
             // initial values in case either point is undefined
@@ -51,7 +51,7 @@ define(["util", "vec2", "Scene", "PointDragger"],
                 context.moveTo(this.p0[0],this.p0[1]);
                 context.lineTo(this.p1[0],this.p1[1]);
 
-                // set drawing style
+                // set drawing lineStyle
                 context.lineWidth = this.lineStyle.width;
                 context.strokeStyle = this.lineStyle.color;
 
@@ -78,14 +78,14 @@ define(["util", "vec2", "Scene", "PointDragger"],
                 var d = vec2.length(vec2.sub(p,pos));
 
                 // allow 2 pixels extra "sensitivity"
+                //console.log("Wurde die Linie getroffen? : " + (d<=(this.lineStyle.width/2)+2));
                 return d<=(this.lineStyle.width/2)+2;
-
             };
 
             // return list of draggers to manipulate this line
             this.createDraggers = function() {
 
-                var draggerStyle = { radius:4, color: this.lineStyle.color, width:0, fill:true }
+                var draggerStyle = { radius:4, color: this.lineStyle.color, width:0, fill:true };
                 var draggers = [];
 
                 // create closure and callbacks for dragger
