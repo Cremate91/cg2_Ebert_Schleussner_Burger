@@ -210,16 +210,18 @@ define(["jquery", "Line", "Circle", "Point", "KdTree", "util", "kdutil", "Parame
 
             var getInfoFromAParametricCurve = function (obj) {
                 $("#btnNewColor").val("#0000FF");
-                $("#btnLineWidth").hide();
+                $("#btnLineWidth").val(obj["lineStyle"]["width"]);
                 $("#btnRadius").hide();
                 $("#btnNewColor").show();
+                $("#btnLineWidth").show();
             };
 
             var getInfoFromABezierCurve = function (obj) {
                 $("#btnNewColor").val("#FF0000");
-                $("#btnLineWidth").hide();
+                $("#btnLineWidth").val(obj["lineStyle"]["width"]);
                 $("#btnRadius").hide();
                 $("#btnNewColor").show();
+                $("#btnLineWidth").show();
             };
 
             sceneController.onSelection(function () {
@@ -265,6 +267,14 @@ define(["jquery", "Line", "Circle", "Point", "KdTree", "util", "kdutil", "Parame
                     geom["pointStyle"]["color"] = $("#btnNewColor").val();
                     console.log("Pointcolor has changed!");
                 }
+                if (geom instanceof ParametricCurve) {
+                    geom["lineStyle"]["color"] = $("#btnNewColor").val();
+                    console.log("Parametriccurvecolor has changed!");
+                }
+                if (geom instanceof BezierCurve) {
+                    geom["lineStyle"]["color"] = $("#btnNewColor").val();
+                    console.log("Beziercurvecolor has changed!");
+                }
                 sceneController.select(geom);
             });
 
@@ -281,6 +291,14 @@ define(["jquery", "Line", "Circle", "Point", "KdTree", "util", "kdutil", "Parame
                 if (geom instanceof Point) {
                     //geom["pointStyle"]["width"] = $("#btnLineWidth").val();                        
                     //console.log("Pointlinewidth has changed!");
+                }
+                if (geom instanceof ParametricCurve) {
+                    geom["lineStyle"]["width"] = $("#btnLineWidth").val();
+                    console.log("Beziercurvelinewidth has changed!");
+                }
+                if (geom instanceof BezierCurve) {
+                    geom["lineStyle"]["width"] = $("#btnLineWidth").val();
+                    console.log("Beziercurvelinewidth has changed!");
                 }
                 sceneController.select(geom);
             });

@@ -1,3 +1,4 @@
+
 /*
  * This is main.js which is referenced directly from within
  * a <script> node in index.html
@@ -7,43 +8,43 @@
 "use strict";
 
 // this shall be the function that generates a new path object
-var makePath = function (sep) {
-    if (sep === undefined) {
-        sep = ", "
+var makePath = function(sep){
+    
+    if(sep === undefined){
+        sep = ", ";
     }
 
     var path = "";
-
-    var f = function (points) {
-        if (points !== undefined) {
-            if (path != "") {
+    var f = function(args){
+        if(args !== undefined){
+            if(path != ""){
                 path += sep;
             }
-            path += points;
+            path += args;
         }
         return path;
     };
-    return f
+    return f;
 };
 
 // the main() function is called when the HTML document is loaded
-var main = function () {
+var main = function() {
 
     ////////////////////////////////////////////////////////////
     //create a path, add a few points on the path, and print it
     var path1 = makePath();
 
-    path1("A");
-    path1("B");
+    path1("A"); 
+    path1("B"); 
     path1("C");
 
     var path2 = makePath("-->");
-    path2("Berlin");
-    path2("San Francisco");
+    path2("Berlin"); 
+    path2("San Francisco"); 
     path2("Vancouver");
 
-    window.console.log("path 1 is " + path1());
-    window.console.log("path 2 is " + path2());
+    window.console.log("path 1 is " + path1() );
+    window.console.log("path 2 is " + path2() );
 
     ////////////////////////////////////////////////////////////
     // second example

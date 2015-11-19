@@ -42,7 +42,7 @@ define(["jquery", "util", "scene", "straight_line", "webgl-demo"],
         context=canvas.getContext("2d");
         
         // create a scene with a curve in it
-        var scene = new Scene(context, "#EDEDED");
+        var scene = new Scene(context, "#EDEDED"); 
 
         var line = new StraightLine(context, scene, [50,100], [250,100]);
         scene.add(line);
