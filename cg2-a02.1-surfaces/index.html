@@ -20,21 +20,26 @@
 
 <body>
 
-  <!-- this element will be used to diplay errors -->
-  <pre id="error"></pre>
+<!-- this element will be used to diplay errors -->
+<pre id="error"></pre>
 
-  <!-- centered region with drawing canvas and parameter area -->
-  <div align="center">
+<!-- centered region with drawing canvas and parameter area -->
+<div align="center">
 
-      <div id="drawing_container" width="600" height="400"></div>
+    <div id="drawing_container" width="600" height="400"></div>
 
-    <div id="param_area" >
+    <div id="param_area">
 
-        <button id="btnRandom"   type="button"   >Random</button>
-        <button id="btnBand" type="button"   >Band</button>
-        <button id="btnEllipsoid" type="button"   >Ellipsoid</button>
-        <button id="btnParametric" type="button"   >Parametric</button>
-
+        <button id="btnRandom" type="button">Random</button>
+        <button id="btnBand" type="button">Band</button>
+        <button id="btnParametricSurface" type="button">ParametricSurface</button>
+        <button id="btnEllipsoid" type="button">Ellipsoid with Points</button>
+        <button id="btnEllipsoidLines" type="button">Ellipsoid with Lines</button>
+        <button id="btnEllipsoidTriangle" type="button">Ellipsoid with Triangles</button>
+        <button id="btnRandomTriangle" type="button">RandomTriangles</button>
+        <br>
+        Animation : <input id="anim" type="checkbox">
+        <br>
         <!-- add more here... -->
         <h3>Selected Object:</h3>
         <table id="random">
@@ -43,7 +48,9 @@
                 <td><input id="numItems" class="objParam" type="number" min="1" max="10000" value="1000">
             </tr>
             <tr>
-                <td><button id="btnNewRandom"   type="button"   >Create Random</button></td>
+                <td>
+                    <button id="btnNewRandom" type="button">Create Random</button>
+                </td>
             </tr>
         </table>
         <table id="band">
@@ -60,32 +67,166 @@
                 <td><input id="height" class="objParam" type="number" min="1" max="1000" value="100">
             </tr>
             <tr>
-                <td><button id="btnNewBand"   type="button"   >Create Band</button></td>
+                <td>
+                    <button id="btnNewBand" type="button">Create Band</button>
+                </td>
+            </tr>
+        </table>
+        <table id="parametricSurface">
+            <tr>
+                <td>Number of Segments:</td>
+                <td><input id="numSegmentsParametricSurface" class="objParam" type="number" min="1" max="10000"
+                           value="1000">
+            </tr>
+            <tr>
+                <td>a:</td>
+                <td><input id="aPara" class="objParam" type="number" min="1" max="1000" value="1">
+            </tr>
+            <tr>
+                <td>b:</td>
+                <td><input id="bPara" class="objParam" type="number" min="1" max="1000" value="1">
+            </tr>
+            <tr>
+                <td>c:</td>
+                <td><input id="cPara" class="objParam" type="number" min="1" max="1000" value="1">
+            </tr>
+            <tr>
+                <td>u Segmente:</td>
+                <td><input id="uSegPara" class="objParam" type="number" min="1" max="1000" value="10">
+            </tr>
+            <tr>
+                <td>v Segmente:</td>
+                <td><input id="vSegPara" class="objParam" type="number" min="1" max="1000" value="10">
+            </tr>
+            <tr>
+                <td>uMIN [0, 6.28]:</td>
+                <td><input id="uMinPara" class="objParam" type="number" min="1" max="1000" value="0">
+            </tr>
+            <tr>
+                <td>uMAX [0, 6.28]:</td>
+                <td><input id="uMaxPara" class="objParam" type="number" min="1" max="1000" value="6.28">
+            </tr>
+            <tr>
+                <td>vMIN [0, 3.14]:</td>
+                <td><input id="vMinPara" class="objParam" type="number" min="1" max="1000" value="0">
+            </tr>
+            <tr>
+                <td>vMAX [0, 3.14]:</td>
+                <td><input id="vMaxPara" class="objParam" type="number" min="1" max="1000" value="3.14">
+            </tr>
+            <tr>
+                <td>Skalierung:</td>
+                <td><input id="paramScale" class="objParam" type="number" min="1" max="1000" value="400">
+            </tr>
+            <tr>
+                <td>Geometrie:</td>
+                <td>
+                    <form id="paraOption" action="">
+                        <select id="auswahl" size="3">
+                            <option>Parametric Surface</option>
+                            <option>Parametric Surface</option>
+                            <option>Parametric Surface</option>
+                        </select>
+                    </form>
+            </tr>
+            <tr>
+                <td>
+                    <button id="btnNewParametricSurface" type="button">Create ParametricSurface</button>
+                </td>
             </tr>
         </table>
         <table id="ellipsoid">
             <tr>
-                <td>Number of Items:</td>
-                <!--<td><input id="numItems" class="objParam" type="number" min="1" max="10000" value="1000">-->
+                <td>a:</td>
+                <td><input id="aEllipsoid" class="objParam" type="number" min="1" max="1000" value="1">
             </tr>
             <tr>
-                <td><button id="btnNewEllipsoid"   type="button"   >Create Ellipsoid</button></td>
+                <td>b:</td>
+                <td><input id="bEllipsoid" class="objParam" type="number" min="1" max="1000" value="0.2">
+            </tr>
+            <tr>
+                <td>c:</td>
+                <td><input id="cEllipsoid" class="objParam" type="number" min="1" max="1000" value="0.5">
+            </tr>
+            <tr>
+                <td>u Segmente:</td>
+                <td><input id="uSegEllipsoid" class="objParam" type="number" min="1" max="1000" value="100">
+            </tr>
+            <tr>
+                <td>v Segmente:</td>
+                <td><input id="vSegEllipsoid" class="objParam" type="number" min="1" max="1000" value="100">
+            </tr>
+            <tr>
+                <td>Skalierung:</td>
+                <td><input id="ellipsoidScale" class="objParam" type="number" min="1" max="1000" value="400">
+            </tr>
+            <tr>
+                <td>
+                    <button id="btnNewEllipsoid" type="button">Create Ellipsoid</button>
+                </td>
             </tr>
         </table>
-        <table id="parametric">
+        <table id="ellipsoidLines">
             <tr>
-                <td>Number of Items:</td>
-                <!--<td><input id="numItems" class="objParam" type="number" min="1" max="10000" value="1000">-->
+                <td>u Segmente:</td>
+                <td><input id="uSegEllipsoidLines" class="objParam" type="number" min="1" max="1000" value="100">
             </tr>
             <tr>
-                <td><button id="btnNewParametric"   type="button"   >Create Parametric</button></td>
+                <td>v Segmente:</td>
+                <td><input id="vSegEllipsoidLines" class="objParam" type="number" min="1" max="1000" value="100">
+            </tr>
+            <tr>
+                <td>Skalierung:</td>
+                <td><input id="ellipsoidLinesScale" class="objParam" type="number" min="1" max="1000" value="400">
+            </tr>
+            <tr>
+                <td>
+                    <button id="btnNewEllipsoidLines" type="button">Create Ellipsoid with Lines</button>
+                </td>
+            </tr>
+        </table>
+        <table id="ellipsoidTriangle">
+            <tr>
+                <td>u Segmente:</td>
+                <td><input id="uSegEllipsoidTriangle" class="objParam" type="number" min="1" max="1000" value="100">
+            </tr>
+            <tr>
+                <td>v Segmente:</td>
+                <td><input id="vSegEllipsoidTriangle" class="objParam" type="number" min="1" max="1000" value="100">
+            </tr>
+            <tr>
+                <td>Skalierung:</td>
+                <td><input id="ellipsoidTriangleScale" class="objParam" type="number" min="1" max="1000" value="400">
+            </tr>
+            <tr>
+                <td>Objektgröße:</td>
+                <td><input id="ellipsoidTriangleSize" class="objParam" type="number" min="1" max="1000" value="100">
+            </tr>
+            <tr>
+                <td>
+                    <button id="btnNewEllipsoidTriangle" type="button">Create Ellipsoid with Triangle</button>
+                </td>
+            </tr>
+        </table>
+        <table id="randomTriangle">
+            <tr>
+                <td>Number of Items:</td>
+                <td><input id="numItemsTriangle" class="objParam" type="number" min="1" max="10000" value="1000">
+            </tr>
+            <tr>
+                <td>Objektgröße:</td>
+                <td><input id="triangleSize" class="objParam" type="number" min="1" max="1000" value="100">
+            </tr>
+            <tr>
+                <td>
+                    <button id="btnNewRandomTriangle" type="button">Create Random Triangles</button>
+                </td>
             </tr>
         </table>
     </div>
 
 
-
-  </div>
+</div>
 
 </body>
 </html>

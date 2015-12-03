@@ -12,6 +12,7 @@ define(["three"],
             var uSeg = config.uSeg || 10;
             var vSeg = config.vSeg || 10;
             var scale = config.scale || 400;
+            var size = config.size || 20;
 
             var uMin = 0;
             var uMax = Math.PI * 2;
@@ -19,14 +20,13 @@ define(["three"],
             var vMax = Math.PI;
 
             var color = new THREE.Color();
-            var index = 0;
             var length = (uSeg+1) * (vSeg+1);
             var counter = 0;
 
             this.positions = new Float32Array(length*3);
             this.colors = new Float32Array(length*3);
 
-            var d = 20, d2 = d/2;
+            var d = size, d2 = d/2;
 
             for (var i = 0; i < uSeg + 1; i++) {
                 for (var j = 0; j < vSeg + 1; j++) {

@@ -17,19 +17,20 @@
 
 /* requireJS module definition */
 define(["three"],
-    (function(THREE) {
+    (function (THREE) {
 
         "use strict";
 
-        var BufferGeometry = function () {
+        var BufferLineGeometry = function () {
 
-            this.mesh     = undefined;
+            this.mesh = undefined;
             this.geometry = new THREE.BufferGeometry();
             //für Dreiecke muss das Materail noch geändert werden und in der Scene eine Ambiente Beleuchtung einbauen
-            this.material = new THREE.PointsMaterial( {
-                color: 0xaaaaaa,
-                size: 10, vertexColors: THREE.VertexColors
-            } );
+            //this.material = new THREE.PointsMaterial( {
+            //    color: 0xaaaaaa,
+            //    size: 10, vertexColors: THREE.VertexColors
+            //} );
+            this.material = new THREE.LineBasicMaterial({vertexColors: THREE.VertexColors});
 
             /**
              * Adds a vertex attribute, we assume each element has three components, e.g.
@@ -39,22 +40,16 @@ define(["three"],
              * @param name vertex attributes name, e.g. position, color, normal
              * @param buffer
              */
-            this.addAttribute = function(name, buffer) {
-                this.geometry.addAttribute( name, new THREE.BufferAttribute( buffer, 3 ) );
+            this.addAttribute = function (name, buffer) {
+                this.geometry.addAttribute(name, new THREE.BufferAttribute(buffer, 3));
                 this.geometry.computeBoundingSphere();
-                /*console.log(this.geometry.normals);
-                //zuer Bildung von Dreiecken anstatt Punkten
-                if(this.geometry.normals != null){
-                    this.mesh = new THREE.mesh( this.geometry, this.material );
-                }else {*/
-                    this.mesh = new THREE.Points( this.geometry, this.material );
-                //}
+                this.mesh = new THREE.Line(this.geometry, this.material);
             }
 
-            this.getMesh = function() {
+            this.getMesh = function () {
                 return this.mesh;
             }
         };
 
-        return BufferGeometry;
+        return BufferLineGeometry;
     }));

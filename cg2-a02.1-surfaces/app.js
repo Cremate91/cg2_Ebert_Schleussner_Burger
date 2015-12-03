@@ -23,12 +23,16 @@ requirejs.config({
 
         "scene" : "./scene/scene",
         "random" : "./models/random",
+        "random_Triangle" : "./models/random_Triangle",
         "band" : "./models/band",
-        "parametric" : "./models/parametric",
+        "parametricSurface" : "./models/parametricSurface",
         "ellipsoid" : "./models/ellipsoid",
+        "ellipsoid_withObjFilling" : "./models/ellipsoid_withObjFilling",
         "util"  : "./utils/util",
         "shaders" : "./shaders",
         "BufferGeometry" : "./scene/buffer_geometry",
+        "BufferLineGeometry" : "./scene/buffer_linegeometry",
+        "BufferTriangleGeometry" : "./scene/buffer_trianglegeometry",
         "HtmlController": "./controller/html_controller"
 
     },

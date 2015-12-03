@@ -11,51 +11,94 @@
 
 
 /* requireJS module definition */
-define(["jquery", "BufferGeometry", "random", "band", "parametric", "ellipsoid"],
-    (function($,BufferGeometry, Random, Band, Parametric, Ellipsoid) {
+define(["jquery", "BufferLineGeometry", "BufferTriangleGeometry", "BufferGeometry", "random", "band", "parametricSurface", "ellipsoid", "ellipsoid_withObjFilling", "random_Triangle"],
+    (function ($, BufferLineGeometry, BufferTriangleGeometry, BufferGeometry, Random, Band, ParametricSurface, Ellipsoid, Ellipsoid_withObjFilling, Random_Triangle) {
         "use strict";
 
         /*
          * define callback functions to react to changes in the HTML page
          * and provide them with a closure defining context and scene
          */
-        var HtmlController = function(scene) {
+        var HtmlController = function (scene) {
 
 
             $("#random").show();
             $("#band").hide();
+            $("#parametricSurface").hide();
             $("#ellipsoid").hide();
-            $("#parametric").hide();
+            $("#ellipsoidLines").hide();
+            $("#ellipsoidTriangle").hide();
+            $("#randomTriangle").hide();
 
-            $("#btnRandom").click( (function() {
+            $("#btnRandom").click((function () {
                 $("#random").show();
                 $("#band").hide();
+                $("#parametricSurface").hide();
+                $("#ellipsoidLines").hide();
+                $("#ellipsoidTriangle").hide();
                 $("#ellipsoid").hide();
-                $("#parametric").hide();
+                $("#randomTriangle").hide();
             }));
 
-            $("#btnBand").click( (function() {
+            $("#btnBand").click((function () {
                 $("#random").hide();
                 $("#band").show();
+                $("#parametricSurface").hide();
+                $("#ellipsoidLines").hide();
+                $("#ellipsoidTriangle").hide();
                 $("#ellipsoid").hide();
-                $("#parametric").hide();
+                $("#randomTriangle").hide();
             }));
 
-            $("#btnEllipsoid").click( (function() {
+            $("#btnParametricSurface").click((function () {
                 $("#random").hide();
                 $("#band").hide();
+                $("#parametricSurface").show();
+                $("#ellipsoidLines").hide();
+                $("#ellipsoidTriangle").hide();
+                $("#ellipsoid").hide();
+                $("#randomTriangle").hide();
+            }));
+
+            $("#btnEllipsoid").click((function () {
+                $("#random").hide();
+                $("#band").hide();
+                $("#parametricSurface").hide();
+                $("#ellipsoidLines").hide();
+                $("#ellipsoidTriangle").hide();
                 $("#ellipsoid").show();
-                $("#parametric").hide();
+                $("#randomTriangle").hide();
             }));
-
-            $("#btnParametric").click( (function() {
+            $("#btnEllipsoidLines").click((function () {
                 $("#random").hide();
                 $("#band").hide();
+                $("#parametricSurface").hide();
+                $("#ellipsoidLines").show();
+                $("#ellipsoidTriangle").hide();
                 $("#ellipsoid").hide();
-                $("#parametric").show();
+                $("#randomTriangle").hide();
+            }));
+            $("#btnEllipsoidTriangle").click((function () {
+                $("#random").hide();
+                $("#band").hide();
+                $("#parametricSurface").hide();
+                $("#ellipsoidLines").hide();
+                $("#ellipsoidTriangle").show();
+                $("#ellipsoid").hide();
+                $("#randomTriangle").hide();
+            }));
+            $("#btnRandomTriangle").click((function () {
+                $("#random").hide();
+                $("#band").hide();
+                $("#parametricSurface").hide();
+                $("#ellipsoidLines").hide();
+                $("#ellipsoidTriangle").hide();
+                $("#ellipsoid").hide();
+                $("#randomTriangle").show();
             }));
 
-            $("#btnNewRandom").click( (function() {
+
+            $("#btnNewRandom").click((function () {
 
                 var numPoints = parseInt($("#numItems").attr("value"));
                 var random = new Random(numPoints);
@@ -67,12 +110,12 @@ define(["jquery", "BufferGeometry", "random", "band", "parametric", "ellipsoid"]
             }));
 
 
-            $("#btnNewBand").click( (function() {
+            $("#btnNewBand").click((function () {
 
                 var config = {
-                    segments : parseInt($("#numSegments").attr("value")),
-                    radius : parseInt($("#radius").attr("value")),
-                    height : parseInt($("#height").attr("value"))
+                    segments: parseInt($("#numSegments").attr("value")),
+                    radius: parseInt($("#radius").attr("value")),
+                    height: parseInt($("#height").attr("value"))
                 };
 
 
@@ -84,46 +127,166 @@ define(["jquery", "BufferGeometry", "random", "band", "parametric", "ellipsoid"]
                 scene.addBufferGeometry(bufferGeometryBand);
             }));
 
-            $("#btnNewParametric").click( (function() {
+            $("#btnNewParametricSurface").click((function () {
+                var a = parseFloat($("#aPara").attr("value"));
+                var b = parseFloat($("#bPara").attr("value"));
+                var c = parseFloat($("#cPara").attr("value"));
+                //var option = document.forms[$("#paraOption")].elements[$("#auswahl")].getSelection();
+                //console.log(option);
 
-                var config = {
-                    segments : parseInt($("#numSegments").attr("value")),
-                    radius : parseInt($("#radius").attr("value")),
-                    height : parseInt($("#height").attr("value"))
+                var pos = function (u, v) {
+                    return {
+                        x: a * Math.cos(u) * Math.sin(v),
+                        y: b * Math.sin(u) * Math.sin(v),
+                        z: c * Math.cos(v)
+                    }
                 };
 
+                var config = {
+                    segments: parseInt($("#numSegmentsParametricSurface").attr("value")),
+                    uSeg: parseInt($("#uSegPara").attr("value")),
+                    vSeg: parseInt($("#vSegPara").attr("value")),
+                    uMin: parseFloat($("#uMinPara").attr("value")),
+                    uMax: parseFloat($("#uMaxPara").attr("value")),
+                    vMin: parseFloat($("#vMinPara").attr("value")),
+                    vMax: parseFloat($("#vMaxpara").attr("value")),
+                    scale: parseInt($("#paramScale").attr("value"))
+                };
 
-                var parametric = new Parametric(config);
-                var bufferGeometryParametric = new BufferGeometry();
-                bufferGeometryParametric.addAttribute("position", parametric.getPositions());
-                bufferGeometryParametric.addAttribute("color", parametric.getColors());
+                var parametricSurface = new ParametricSurface(pos, config);
+                var bufferGeometryParametricSurface = new BufferGeometry();
+                bufferGeometryParametricSurface.addAttribute("position", parametricSurface.getPositions());
+                bufferGeometryParametricSurface.addAttribute("color", parametricSurface.getColors());
 
-                scene.addBufferGeometry(bufferGeometryParametric);
+                scene.addBufferGeometry(bufferGeometryParametricSurface);
             }));
 
-            $("#btnNewEllipsoid").click( (function() {
+            $("#btnNewEllipsoid").click((function () {
+
+                var a = parseFloat($("#aEllipsoid").attr("value"));
+                var b = parseFloat($("#bEllipsoid").attr("value"));
+                var c = parseFloat($("#cEllipsoid").attr("value"));
+
+                var pos = function (u, v) {
+                    return {
+                        x: a * Math.cos(u) * Math.sin(v),
+                        y: b * Math.sin(u) * Math.sin(v),
+                        z: c * Math.cos(v)
+                    }
+                };
 
                 var config = {
-                    segments : parseInt($("#numSegments").attr("value")),
-                    radius : parseInt($("#radius").attr("value")),
-                    height : parseInt($("#height").attr("value"))
+                    uSeg: parseInt($("#uSegEllipsoid").attr("value")),
+                    vSeg: parseInt($("#vSegEllipsoid").attr("value")),
+                    scale: parseInt($("#ellipsoidScale").attr("value"))
                 };
 
 
-                var ellipsoid = new Ellipsoid(config);
+                var ellipsoid = new Ellipsoid(pos, config);
                 var bufferGeometryEllipsoid = new BufferGeometry();
                 bufferGeometryEllipsoid.addAttribute("position", ellipsoid.getPositions());
                 bufferGeometryEllipsoid.addAttribute("color", ellipsoid.getColors());
 
                 scene.addBufferGeometry(bufferGeometryEllipsoid);
             }));
+
+            $("#btnNewEllipsoidLines").click((function () {
+
+                var pos = function (u, v) {
+                    return {
+                        x: Math.cos(u) * Math.sin(v),
+                        y: 0.2 * Math.sin(u) * Math.sin(v),
+                        z: 0.5 * Math.cos(v)
+                    }
+                };
+
+                var config = {
+                    uSeg: parseInt($("#uSegEllipsoidLines").attr("value")),
+                    vSeg: parseInt($("#vSegEllipsoidLines").attr("value")),
+                    scale: parseInt($("#ellipsoidLinesScale").attr("value"))
+                };
+
+
+                var ellipsoid = new Ellipsoid_withObjFilling(pos, config);
+                var bufferGeometryEllipsoid = new BufferLineGeometry();
+                bufferGeometryEllipsoid.addAttribute("position", ellipsoid.getPositions());
+                bufferGeometryEllipsoid.addAttribute("color", ellipsoid.getColors());
+
+                scene.addBufferGeometry(bufferGeometryEllipsoid);
+            }));
+
+            $("#btnNewEllipsoidTriangle").click((function () {
+
+                var pos = function (u, v) {
+                    return {
+                        x: Math.cos(u) * Math.sin(v),
+                        y: 0.2 * Math.sin(u) * Math.sin(v),
+                        z: 0.5 * Math.cos(v)
+                    }
+                };
+
+                var config = {
+                    uSeg: parseInt($("#uSegEllipsoidTriangle").attr("value")),
+                    vSeg: parseInt($("#vSegEllipsoidTriangle").attr("value")),
+                    scale: parseInt($("#ellipsoidTriangleScale").attr("value")),
+                    size: parseInt($("#ellipsoidTriangleSize").attr("value"))
+                };
+
+
+                var ellipsoid = new Ellipsoid_withObjFilling(pos, config);
+                var bufferGeometryEllipsoid = new BufferTriangleGeometry();
+                bufferGeometryEllipsoid.addAttribute("position", ellipsoid.getPositions());
+                bufferGeometryEllipsoid.addAttribute("color", ellipsoid.getColors());
+
+                scene.addBufferGeometry(bufferGeometryEllipsoid);
+                scene.addLights(true);
+            }));
+
+            $("#btnNewRandomTriangle").click((function () {
+
+                var numPoints = parseInt($("#numItemsTriangle").attr("value"));
+                var triangleSize = parseInt($("#triangleSize").attr("value"));
+
+                var randomTriangles = new Random_Triangle(numPoints, triangleSize);
+                var bufferGeometryRandomTriangles = new BufferTriangleGeometry();
+                bufferGeometryRandomTriangles.addAttribute("position", randomTriangles.getPositions());
+                bufferGeometryRandomTriangles.addAttribute("normal", randomTriangles.getNormals());
+                bufferGeometryRandomTriangles.addAttribute("color", randomTriangles.getColors());
+
+                scene.addBufferGeometry(bufferGeometryRandomTriangles);
+                scene.addLights(true);
+            }));
+
+            $("#anim").click((function () {
+                if ($("#anim").attr('checked')) {
+                    animate();
+                    //console.log("start");
+                } else {
+                    //console.log("stop");
+                    stopAnimate();
+                }
+            }));
+
+            var ani;
+
+            function animate() {
+                scene.letAnim(true);
+                ani = requestAnimationFrame(animate);
+            }
+
+            function stopAnimate() {
+                cancelAnimationFrame(ani);
+            }
+
+
         };
 
-        // return the constructor function
+// return the constructor function
         return HtmlController;
 
 
-    })); // require
+    }))
+; // require
 
 
 

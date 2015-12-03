@@ -1,32 +1,41 @@
-/**
- * Created by Phenax on 12.11.2015.
+/*
+ * JavaScript / Canvas teaching framwork
+ * (C)opyright Kristian Hildebrand, khildebrand@beuth-hochschule.de
+ *
+ * Module: ParametricSurface
+ *
  */
 
+/* requireJS module definition */
 define(["three"],
-    (function(THREE) {
+    (function (THREE) {
 
         "use strict";
 
-        var Ellipsoid = function (posFunc, config) {
+        var ParametricSurface = function (posFunc, config) {
 
-            var uSeg = config.uSeg || 10;
-            var vSeg = config.vSeg || 10;
+            var uSeg = config.uSeg || 100;
+            var vSeg = config.vSeg || 100;
+            var uMin = config.uMin || 0;
+            var uMax = config.uMax || Math.PI * 2;
+            var vMin = config.vMin || 0;
+            var vMax = config.vMax || Math.PI;
             var scale = config.scale || 400;
 
-            var uMin = 0;
-            var uMax = Math.PI * 2;
-            var vMin = 0;
-            var vMax = Math.PI;
+            if (uMin < 0 || uMin > Math.PI*2) uMin = 0;
+            if (uMax < 0 || uMax > Math.PI*2) uMax = Math.PI * 2;
+            if (vMin < 0 || vMin > Math.PI) vMin = 0;
+            if (vMax < 0 || vMax > Math.PI) vMax = Math.PI;
+
 
             var color = new THREE.Color();
             var index = 0;
+            //index = j + i * (vSeg+1);
             var length = (uSeg+1) * (vSeg+1);
             var counter = 0;
 
             this.positions = new Float32Array(length*3);
             this.colors = new Float32Array(length*3);
-
-            var d = 20, d2 = d/2;
 
             for (var i = 0; i < uSeg + 1; i++) {
                 for (var j = 0; j < vSeg + 1; j++) {
@@ -38,19 +47,11 @@ define(["three"],
                     var y = posArr.y * scale;
                     var z = posArr.z * scale;
 
-                    var xa = x * Math.random() + Math.random() * d - d2;
-                    var ya = y * Math.random() + Math.random() * d - d2;
-                    var za = z * Math.random() + Math.random() * d - d2;
+                    this.positions[counter] = x;
+                    this.positions[counter+1] = y;
+                    this.positions[counter+2] = z;
 
-                    this.positions[counter] = xa;
-                    this.positions[counter+1] = ya;
-                    this.positions[counter+2] = za;
-
-                    var vx = ( x / scale ) + 0.5;
-                    var vy = ( y / scale ) + 0.5;
-                    var vz = ( z / scale ) + 0.5;
-
-                    color.setRGB( vx, vy, vz );
+                    color.setRGB(1, 0, 0);
 
                     this.colors[counter] = color.r;
                     this.colors[counter+1] = color.g;
@@ -58,6 +59,8 @@ define(["three"],
                     counter+=3;
                 }
             }
+            //console.log(this.positions.length);
+            //console.log(counter);
 
             this.getPositions = function () {
                 return this.positions;
@@ -67,8 +70,8 @@ define(["three"],
                 return this.colors;
             };
 
-
         };
 
-        return Ellipsoid;
+        return ParametricSurface;
     }));
+

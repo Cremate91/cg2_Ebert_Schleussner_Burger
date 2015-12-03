@@ -21,14 +21,18 @@ define(["three"],
 
         "use strict";
 
-        var BufferGeometry = function () {
+        var BufferTriangleGeometry = function () {
 
             this.mesh     = undefined;
             this.geometry = new THREE.BufferGeometry();
             //für Dreiecke muss das Materail noch geändert werden und in der Scene eine Ambiente Beleuchtung einbauen
-            this.material = new THREE.PointsMaterial( {
-                color: 0xaaaaaa,
-                size: 10, vertexColors: THREE.VertexColors
+            //this.material = new THREE.PointsMaterial( {
+            //    color: 0xaaaaaa,
+            //    size: 10, vertexColors: THREE.VertexColors
+            //} );
+            this.material = new THREE.MeshPhongMaterial( {
+                color: 0xaaaaaa, specular: 0xffffff, shininess: 250,
+                side: THREE.DoubleSide, vertexColors: THREE.VertexColors
             } );
 
             /**
@@ -42,13 +46,7 @@ define(["three"],
             this.addAttribute = function(name, buffer) {
                 this.geometry.addAttribute( name, new THREE.BufferAttribute( buffer, 3 ) );
                 this.geometry.computeBoundingSphere();
-                /*console.log(this.geometry.normals);
-                //zuer Bildung von Dreiecken anstatt Punkten
-                if(this.geometry.normals != null){
-                    this.mesh = new THREE.mesh( this.geometry, this.material );
-                }else {*/
-                    this.mesh = new THREE.Points( this.geometry, this.material );
-                //}
+                this.mesh = new THREE.Mesh( this.geometry, this.material );
             }
 
             this.getMesh = function() {
@@ -56,5 +54,5 @@ define(["three"],
             }
         };
 
-        return BufferGeometry;
+        return BufferTriangleGeometry;
     }));
