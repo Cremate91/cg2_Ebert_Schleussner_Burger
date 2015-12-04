@@ -22,12 +22,6 @@ define(["three"],
             var vMax = config.vMax || Math.PI;
             var scale = config.scale || 400;
 
-            if (uMin < 0 || uMin > Math.PI*2) uMin = 0;
-            if (uMax < 0 || uMax > Math.PI*2) uMax = Math.PI * 2;
-            if (vMin < 0 || vMin > Math.PI) vMin = 0;
-            if (vMax < 0 || vMax > Math.PI) vMax = Math.PI;
-
-
             var color = new THREE.Color();
             var index = 0;
             //index = j + i * (vSeg+1);

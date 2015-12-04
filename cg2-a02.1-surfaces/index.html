@@ -33,9 +33,10 @@
         <button id="btnRandom" type="button">Random</button>
         <button id="btnBand" type="button">Band</button>
         <button id="btnParametricSurface" type="button">ParametricSurface</button>
-        <button id="btnEllipsoid" type="button">Ellipsoid with Points</button>
-        <button id="btnEllipsoidLines" type="button">Ellipsoid with Lines</button>
-        <button id="btnEllipsoidTriangle" type="button">Ellipsoid with Triangles</button>
+        <button id="btnDinis" type="button">Dini´s Surface</button>
+        <button id="btnTranguloidTrefoil" type="button">Tranguloid Trefoil</button>
+        <button id="btnEllipsoid" type="button">Ellipsoid</button>
+        <button id="btnEllipsoidWithFill" type="button">Ellipsoid with Filling</button>
         <button id="btnRandomTriangle" type="button">RandomTriangles</button>
         <br>
         Animation : <input id="anim" type="checkbox">
@@ -119,15 +120,11 @@
                 <td><input id="paramScale" class="objParam" type="number" min="1" max="1000" value="400">
             </tr>
             <tr>
-                <td>Geometrie:</td>
+                <td>Material:</td>
                 <td>
-                    <form id="paraOption" action="">
-                        <select id="auswahl" size="3">
-                            <option>Parametric Surface</option>
-                            <option>Parametric Surface</option>
-                            <option>Parametric Surface</option>
-                        </select>
-                    </form>
+                    Punkte :<input id="matPoint" type="checkbox" style="margin-left: -25px">
+                    Linien :<input id="matLine" type="checkbox" style="margin-left: -17px">
+                    Dreiecke:<input id="matTriangle" type="checkbox" style="margin-left: -33px">
             </tr>
             <tr>
                 <td>
@@ -135,19 +132,99 @@
                 </td>
             </tr>
         </table>
-        <table id="ellipsoid">
+        <table id="dinisSurface">
             <tr>
                 <td>a:</td>
-                <td><input id="aEllipsoid" class="objParam" type="number" min="1" max="1000" value="1">
+                <td><input id="aDinis" class="objParam" type="number" min="1" max="1000" value="0.1">
             </tr>
             <tr>
                 <td>b:</td>
-                <td><input id="bEllipsoid" class="objParam" type="number" min="1" max="1000" value="0.2">
+                <td><input id="bDinis" class="objParam" type="number" min="1" max="1000" value="0.1">
             </tr>
             <tr>
-                <td>c:</td>
-                <td><input id="cEllipsoid" class="objParam" type="number" min="1" max="1000" value="0.5">
+                <td>u Segmente:</td>
+                <td><input id="uSegDinis" class="objParam" type="number" min="1" max="1000" value="100">
             </tr>
+            <tr>
+                <td>v Segmente:</td>
+                <td><input id="vSegDinis" class="objParam" type="number" min="1" max="1000" value="100">
+            </tr>
+            <tr>
+                <td>uMIN [0, 6.28]:</td>
+                <td><input id="uMinDinis" class="objParam" type="number" min="1" max="1000" value="0">
+            </tr>
+            <tr>
+                <td>uMAX [0, 6.28]:</td>
+                <td><input id="uMaxDinis" class="objParam" type="number" min="1" max="1000" value="12.56">
+            </tr>
+            <tr>
+                <td>vMIN [0, 3.14]:</td>
+                <td><input id="vMinDinis" class="objParam" type="number" min="1" max="1000" value="0.01">
+            </tr>
+            <tr>
+                <td>vMAX [0, 3.14]:</td>
+                <td><input id="vMaxDinis" class="objParam" type="number" min="1" max="1000" value="2">
+            </tr>
+            <tr>
+                <td>Skalierung:</td>
+                <td><input id="dinisScale" class="objParam" type="number" min="1" max="1000" value="400">
+            </tr>
+            <tr>
+                <td>Material:</td>
+                <td>
+                    Punkte :<input id="matPointDinis" type="checkbox" style="margin-left: -25px"><br>
+                    Linien :<input id="matLineDinis" type="checkbox" style="margin-left: -17px">
+                    Dreiecke:<input id="matTriangleDinis" type="checkbox" style="margin-left: -33px">
+            </tr>
+            <tr>
+                <td>
+                    <button id="btnNewDinis" type="button">Create Dini´s Surface</button>
+                </td>
+            </tr>
+        </table>
+        <table id="tranguloidTrefoil">
+            <tr>
+                <td>u Segmente:</td>
+                <td><input id="uSegTranguloidTrefoil" class="objParam" type="number" min="1" max="1000" value="100">
+            </tr>
+            <tr>
+                <td>v Segmente:</td>
+                <td><input id="vSegTranguloidTrefoil" class="objParam" type="number" min="1" max="1000" value="100">
+            </tr>
+            <tr>
+                <td>uMIN [0, 6.28]:</td>
+                <td><input id="uMinTranguloidTrefoil" class="objParam" type="number" min="1" max="1000" value="-3.14">
+            </tr>
+            <tr>
+                <td>uMAX [0, 6.28]:</td>
+                <td><input id="uMaxTranguloidTrefoil" class="objParam" type="number" min="1" max="1000" value="3.14">
+            </tr>
+            <tr>
+                <td>vMIN [0, 3.14]:</td>
+                <td><input id="vMinTranguloidTrefoil" class="objParam" type="number" min="1" max="1000" value="-3.14">
+            </tr>
+            <tr>
+                <td>vMAX [0, 3.14]:</td>
+                <td><input id="vMaxTranguloidTrefoil" class="objParam" type="number" min="1" max="1000" value="3.14">
+            </tr>
+            <tr>
+                <td>Skalierung:</td>
+                <td><input id="tranguloidTrefoilScale" class="objParam" type="number" min="1" max="1000" value="100">
+            </tr>
+            <tr>
+                <td>Material:</td>
+                <td>
+                    Punkte :<input id="matPointTranguloidTrefoil" type="checkbox" style="margin-left: -25px"><br>
+                    Linien :<input id="matLineTranguloidTrefoil" type="checkbox" style="margin-left: -17px">
+                    Dreiecke:<input id="matTriangleTranguloidTrefoil" type="checkbox" style="margin-left: -33px">
+            </tr>
+            <tr>
+                <td>
+                    <button id="btnNewTranguloidTrefoil" type="button">Create Tranguloid Trefoil</button>
+                </td>
+            </tr>
+        </table>
+        <table id="ellipsoid">
             <tr>
                 <td>u Segmente:</td>
                 <td><input id="uSegEllipsoid" class="objParam" type="number" min="1" max="1000" value="100">
@@ -161,50 +238,41 @@
                 <td><input id="ellipsoidScale" class="objParam" type="number" min="1" max="1000" value="400">
             </tr>
             <tr>
+                <td>Material:</td>
+                <td>
+                    Punkte :<input id="matPointEllipsoid" type="checkbox" style="margin-left: -25px"><br>
+                    Linien :<input id="matLineEllipsoid" type="checkbox" style="margin-left: -17px">
+                    Dreiecke:<input id="matTriangleEllipsoid" type="checkbox" style="margin-left: -33px">
+            </tr>
+            <tr>
                 <td>
                     <button id="btnNewEllipsoid" type="button">Create Ellipsoid</button>
                 </td>
             </tr>
         </table>
-        <table id="ellipsoidLines">
+        <table id="ellipsoidWithFill">
             <tr>
                 <td>u Segmente:</td>
-                <td><input id="uSegEllipsoidLines" class="objParam" type="number" min="1" max="1000" value="100">
+                <td><input id="uSegEllipsoidWithFill" class="objParam" type="number" min="1" max="1000" value="100">
             </tr>
             <tr>
                 <td>v Segmente:</td>
-                <td><input id="vSegEllipsoidLines" class="objParam" type="number" min="1" max="1000" value="100">
+                <td><input id="vSegEllipsoidWithFill" class="objParam" type="number" min="1" max="1000" value="100">
             </tr>
             <tr>
                 <td>Skalierung:</td>
-                <td><input id="ellipsoidLinesScale" class="objParam" type="number" min="1" max="1000" value="400">
+                <td><input id="ellipsoidWithFillScale" class="objParam" type="number" min="1" max="1000" value="400">
+            </tr>
+            <tr>
+                <td>Material:</td>
+                <td>
+                    Punkte :<input id="matPointEllipsoidWithFill" type="checkbox" style="margin-left: -25px"><br>
+                    Linien :<input id="matLineEllipsoidWithFill" type="checkbox" style="margin-left: -17px">
+                    Dreiecke:<input id="matTriangleEllipsoidWithFill" type="checkbox" style="margin-left: -33px">
             </tr>
             <tr>
                 <td>
-                    <button id="btnNewEllipsoidLines" type="button">Create Ellipsoid with Lines</button>
-                </td>
-            </tr>
-        </table>
-        <table id="ellipsoidTriangle">
-            <tr>
-                <td>u Segmente:</td>
-                <td><input id="uSegEllipsoidTriangle" class="objParam" type="number" min="1" max="1000" value="100">
-            </tr>
-            <tr>
-                <td>v Segmente:</td>
-                <td><input id="vSegEllipsoidTriangle" class="objParam" type="number" min="1" max="1000" value="100">
-            </tr>
-            <tr>
-                <td>Skalierung:</td>
-                <td><input id="ellipsoidTriangleScale" class="objParam" type="number" min="1" max="1000" value="400">
-            </tr>
-            <tr>
-                <td>Objektgröße:</td>
-                <td><input id="ellipsoidTriangleSize" class="objParam" type="number" min="1" max="1000" value="100">
-            </tr>
-            <tr>
-                <td>
-                    <button id="btnNewEllipsoidTriangle" type="button">Create Ellipsoid with Triangle</button>
+                    <button id="btnNewEllipsoidWithFill" type="button">Create Ellipsoid with Filling</button>
                 </td>
             </tr>
         </table>

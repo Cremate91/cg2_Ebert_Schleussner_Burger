@@ -12,8 +12,8 @@
 
 
 /* requireJS module definition */
-define(["three", "util", "shaders", "BufferGeometry", "BufferLineGeometry", "BufferTriangleGeometry", "random", "band", "parametricSurface", "ellipsoid", "ellipsoid_withObjFilling", "random_Triangle"],
-    (function (THREE, util, shaders, BufferGeometry, BufferLineGeometry, BufferTriangleGeometry, Random, Band, ParametricSurface, Ellipsoid, Ellipsoid_withObjFilling, Random_Triangle) {
+define(["three", "util", "shaders", "BufferGeometry", "BufferLineGeometry", "BufferTriangleGeometry", "random", "band", "parametricSurface", "ellipsoid_withObjFilling", "random_Triangle"],
+    (function (THREE, util, shaders, BufferGeometry, BufferLineGeometry, BufferTriangleGeometry, Random, Band, ParametricSurface, Ellipsoid_withObjFilling, Random_Triangle) {
 
         "use strict";
 
@@ -65,6 +65,7 @@ define(["three", "util", "shaders", "BufferGeometry", "BufferLineGeometry", "Buf
 
                 scope.currentMesh = bufferGeometry.getMesh();
                 scope.scene.add(scope.currentMesh);
+                this.addLights(true);
 
             }
 
@@ -74,11 +75,11 @@ define(["three", "util", "shaders", "BufferGeometry", "BufferLineGeometry", "Buf
 
                     var light1 = new THREE.DirectionalLight(0xffffff, 0.5);
                     light1.position.set(1, 1, 1);
-                    //scope.scene.add(light1);
+                    scope.scene.add(light1);
 
                     var light2 = new THREE.DirectionalLight(0xffffff, 1.5);
                     light2.position.set(0, -1, 0);
-                    //scope.scene.add(light2);
+                    scope.scene.add(light2);
                 }else{
                     //scope.scene.add(new THREE.AmbientLight(0xcccccc));
                 }

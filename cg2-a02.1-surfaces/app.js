@@ -26,7 +26,6 @@ requirejs.config({
         "random_Triangle" : "./models/random_Triangle",
         "band" : "./models/band",
         "parametricSurface" : "./models/parametricSurface",
-        "ellipsoid" : "./models/ellipsoid",
         "ellipsoid_withObjFilling" : "./models/ellipsoid_withObjFilling",
         "util"  : "./utils/util",
         "shaders" : "./shaders",
