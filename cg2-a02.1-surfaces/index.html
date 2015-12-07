@@ -37,9 +37,23 @@
         <button id="btnTranguloidTrefoil" type="button">Tranguloid Trefoil</button>
         <button id="btnEllipsoid" type="button">Ellipsoid</button>
         <button id="btnEllipsoidWithFill" type="button">Ellipsoid with Filling</button>
-        <button id="btnRandomTriangle" type="button">RandomTriangles</button>
+        <button id="btnCustomRandom" type="button">CustomRandom</button>
         <br>
-        Animation : <input id="anim" type="checkbox">
+        <br>
+        <h3>Animation : <input id="anim" type="checkbox"></h3>
+        <br>
+        <button id="btnRemoveObj" type="button">Remove this Obj</button>
+        <br>
+        <br>
+        <table>
+            <tr>
+                <td><h3>Material</h3></td>
+                <td>Punkte :<input id="matPoint" type="checkbox" style="width: 20px; margin-left: 12px"><br>
+                    Linien :<input id="matLine" type="checkbox" style="width: 20px; margin-left: 20px"><br>
+                    Dreiecke:<input id="matTriangle" type="checkbox" style="width: 20px">
+                </td>
+            </tr>
+        </table>
         <br>
         <!-- add more here... -->
         <h3>Selected Object:</h3>
@@ -75,11 +89,6 @@
         </table>
         <table id="parametricSurface">
             <tr>
-                <td>Number of Segments:</td>
-                <td><input id="numSegmentsParametricSurface" class="objParam" type="number" min="1" max="10000"
-                           value="1000">
-            </tr>
-            <tr>
                 <td>a:</td>
                 <td><input id="aPara" class="objParam" type="number" min="1" max="1000" value="1">
             </tr>
@@ -93,42 +102,42 @@
             </tr>
             <tr>
                 <td>u Segmente:</td>
-                <td><input id="uSegPara" class="objParam" type="number" min="1" max="1000" value="10">
+                <td><input id="uSegPara" class="objParam" type="number" min="1" max="1000" value="500">
             </tr>
             <tr>
                 <td>v Segmente:</td>
-                <td><input id="vSegPara" class="objParam" type="number" min="1" max="1000" value="10">
+                <td><input id="vSegPara" class="objParam" type="number" min="1" max="1000" value="500">
             </tr>
             <tr>
-                <td>uMIN [0, 6.28]:</td>
+                <td>uMIN:</td>
                 <td><input id="uMinPara" class="objParam" type="number" min="1" max="1000" value="0">
             </tr>
             <tr>
-                <td>uMAX [0, 6.28]:</td>
-                <td><input id="uMaxPara" class="objParam" type="number" min="1" max="1000" value="6.28">
+                <td>uMAX:</td>
+                <td><input id="uMaxPara" class="objParam" type="number" min="1" max="1000" value="14.5">
             </tr>
             <tr>
-                <td>vMIN [0, 3.14]:</td>
+                <td>vMIN:</td>
                 <td><input id="vMinPara" class="objParam" type="number" min="1" max="1000" value="0">
             </tr>
             <tr>
-                <td>vMAX [0, 3.14]:</td>
-                <td><input id="vMaxPara" class="objParam" type="number" min="1" max="1000" value="3.14">
+                <td>vMAX:</td>
+                <td><input id="vMaxPara" class="objParam" type="number" min="1" max="1000" value="6.28">
             </tr>
             <tr>
                 <td>Skalierung:</td>
-                <td><input id="paramScale" class="objParam" type="number" min="1" max="1000" value="400">
+                <td><input id="paramScale" class="objParam" type="number" min="1" max="1000" value="50">
             </tr>
             <tr>
-                <td>Material:</td>
+                <td>Formeln XYZ: (Hinweis: Math. nicht vergessen!)</td>
                 <td>
-                    Punkte :<input id="matPoint" type="checkbox" style="margin-left: -25px">
-                    Linien :<input id="matLine" type="checkbox" style="margin-left: -17px">
-                    Dreiecke:<input id="matTriangle" type="checkbox" style="margin-left: -33px">
+                    x :<br><input id="xPara" type="text" value="u * Math.cos(Math.cos(u)) * Math.cos(v)"><br>
+                    y :<br><input id="yPara" type="text" value="u * Math.cos(Math.cos(u)) * Math.sin(v)"><br>
+                    z :<br><input id="zPara" type="text" value="u * Math.sin(Math.cos(u))">
             </tr>
             <tr>
                 <td>
-                    <button id="btnNewParametricSurface" type="button">Create ParametricSurface</button>
+                    <button id="btnNewParametricSurface" type="button">Create Parametricsurface</button>
                 </td>
             </tr>
         </table>
@@ -150,19 +159,19 @@
                 <td><input id="vSegDinis" class="objParam" type="number" min="1" max="1000" value="100">
             </tr>
             <tr>
-                <td>uMIN [0, 6.28]:</td>
+                <td>uMIN <br>[0, 12.56]:</td>
                 <td><input id="uMinDinis" class="objParam" type="number" min="1" max="1000" value="0">
             </tr>
             <tr>
-                <td>uMAX [0, 6.28]:</td>
+                <td>uMAX <br>[0, 12.56]:</td>
                 <td><input id="uMaxDinis" class="objParam" type="number" min="1" max="1000" value="12.56">
             </tr>
             <tr>
-                <td>vMIN [0, 3.14]:</td>
+                <td>vMIN <br>[0.01, 2]:</td>
                 <td><input id="vMinDinis" class="objParam" type="number" min="1" max="1000" value="0.01">
             </tr>
             <tr>
-                <td>vMAX [0, 3.14]:</td>
+                <td>vMAX <br>[0.01, 2]:</td>
                 <td><input id="vMaxDinis" class="objParam" type="number" min="1" max="1000" value="2">
             </tr>
             <tr>
@@ -170,15 +179,8 @@
                 <td><input id="dinisScale" class="objParam" type="number" min="1" max="1000" value="400">
             </tr>
             <tr>
-                <td>Material:</td>
                 <td>
-                    Punkte :<input id="matPointDinis" type="checkbox" style="margin-left: -25px"><br>
-                    Linien :<input id="matLineDinis" type="checkbox" style="margin-left: -17px">
-                    Dreiecke:<input id="matTriangleDinis" type="checkbox" style="margin-left: -33px">
-            </tr>
-            <tr>
-                <td>
-                    <button id="btnNewDinis" type="button">Create Dini´s Surface</button>
+                    <button id="btnNewDinis" type="button">Create Dini's_Surface</button>
                 </td>
             </tr>
         </table>
@@ -192,19 +194,19 @@
                 <td><input id="vSegTranguloidTrefoil" class="objParam" type="number" min="1" max="1000" value="100">
             </tr>
             <tr>
-                <td>uMIN [0, 6.28]:</td>
+                <td>uMIN <br>[-3.14, 3.14]:</td>
                 <td><input id="uMinTranguloidTrefoil" class="objParam" type="number" min="1" max="1000" value="-3.14">
             </tr>
             <tr>
-                <td>uMAX [0, 6.28]:</td>
+                <td>uMAX <br>[-3.14, 3.14]:</td>
                 <td><input id="uMaxTranguloidTrefoil" class="objParam" type="number" min="1" max="1000" value="3.14">
             </tr>
             <tr>
-                <td>vMIN [0, 3.14]:</td>
+                <td>vMIN <br>[-3.14, 3.14]:</td>
                 <td><input id="vMinTranguloidTrefoil" class="objParam" type="number" min="1" max="1000" value="-3.14">
             </tr>
             <tr>
-                <td>vMAX [0, 3.14]:</td>
+                <td>vMAX <br>[-3.14, 3.14]:</td>
                 <td><input id="vMaxTranguloidTrefoil" class="objParam" type="number" min="1" max="1000" value="3.14">
             </tr>
             <tr>
@@ -212,15 +214,8 @@
                 <td><input id="tranguloidTrefoilScale" class="objParam" type="number" min="1" max="1000" value="100">
             </tr>
             <tr>
-                <td>Material:</td>
                 <td>
-                    Punkte :<input id="matPointTranguloidTrefoil" type="checkbox" style="margin-left: -25px"><br>
-                    Linien :<input id="matLineTranguloidTrefoil" type="checkbox" style="margin-left: -17px">
-                    Dreiecke:<input id="matTriangleTranguloidTrefoil" type="checkbox" style="margin-left: -33px">
-            </tr>
-            <tr>
-                <td>
-                    <button id="btnNewTranguloidTrefoil" type="button">Create Tranguloid Trefoil</button>
+                    <button id="btnNewTranguloidTrefoil" type="button">Create Tranguloid_Trefoil</button>
                 </td>
             </tr>
         </table>
@@ -236,13 +231,6 @@
             <tr>
                 <td>Skalierung:</td>
                 <td><input id="ellipsoidScale" class="objParam" type="number" min="1" max="1000" value="400">
-            </tr>
-            <tr>
-                <td>Material:</td>
-                <td>
-                    Punkte :<input id="matPointEllipsoid" type="checkbox" style="margin-left: -25px"><br>
-                    Linien :<input id="matLineEllipsoid" type="checkbox" style="margin-left: -17px">
-                    Dreiecke:<input id="matTriangleEllipsoid" type="checkbox" style="margin-left: -33px">
             </tr>
             <tr>
                 <td>
@@ -264,30 +252,23 @@
                 <td><input id="ellipsoidWithFillScale" class="objParam" type="number" min="1" max="1000" value="400">
             </tr>
             <tr>
-                <td>Material:</td>
-                <td>
-                    Punkte :<input id="matPointEllipsoidWithFill" type="checkbox" style="margin-left: -25px"><br>
-                    Linien :<input id="matLineEllipsoidWithFill" type="checkbox" style="margin-left: -17px">
-                    Dreiecke:<input id="matTriangleEllipsoidWithFill" type="checkbox" style="margin-left: -33px">
-            </tr>
-            <tr>
                 <td>
                     <button id="btnNewEllipsoidWithFill" type="button">Create Ellipsoid with Filling</button>
                 </td>
             </tr>
         </table>
-        <table id="randomTriangle">
+        <table id="customRandom">
             <tr>
                 <td>Number of Items:</td>
-                <td><input id="numItemsTriangle" class="objParam" type="number" min="1" max="10000" value="1000">
+                <td><input id="numItemsCustomRandom" class="objParam" type="number" min="1" max="10000" value="1000">
             </tr>
             <tr>
                 <td>Objektgröße:</td>
-                <td><input id="triangleSize" class="objParam" type="number" min="1" max="1000" value="100">
+                <td><input id="customRandomSize" class="objParam" type="number" min="1" max="1000" value="100">
             </tr>
             <tr>
                 <td>
-                    <button id="btnNewRandomTriangle" type="button">Create Random Triangles</button>
+                    <button id="btnNewCustomRandom" type="button">Create CustomRandom</button>
                 </td>
             </tr>
         </table>

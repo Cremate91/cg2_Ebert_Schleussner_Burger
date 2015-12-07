@@ -40,5 +40,9 @@ h3 {
 
 /* all input elements get a fixed width */
 input {
-    width:80px;
+    width:100px;
+}
+
+table tr td  {
+    margin-right: 20%;
 }

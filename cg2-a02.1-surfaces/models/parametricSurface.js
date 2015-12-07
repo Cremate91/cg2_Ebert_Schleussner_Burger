@@ -23,13 +23,17 @@ define(["three"],
             var scale = config.scale || 400;
 
             var color = new THREE.Color();
-            var index = 0;
-            //index = j + i * (vSeg+1);
+            /*********************/
+            // TODO: Index-Array erstellen und somit eine Wireframe-Oberfläche erzeugen
+            // var index = 0;
+            // index = j + i * (vSeg+1);
+            /*********************/
             var length = (uSeg+1) * (vSeg+1);
             var counter = 0;
 
             this.positions = new Float32Array(length*3);
             this.colors = new Float32Array(length*3);
+
 
             for (var i = 0; i < uSeg + 1; i++) {
                 for (var j = 0; j < vSeg + 1; j++) {

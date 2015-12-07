@@ -21,7 +21,6 @@ define(["jquery", "BufferLineGeometry", "BufferTriangleGeometry", "BufferGeometr
          */
         var HtmlController = function (scene) {
 
-
             $("#random").show();
             $("#band").hide();
             $("#parametricSurface").hide();
@@ -29,7 +28,7 @@ define(["jquery", "BufferLineGeometry", "BufferTriangleGeometry", "BufferGeometr
             $("#tranguloidTrefoil").hide();
             $("#ellipsoid").hide();
             $("#ellipsoidWithFill").hide();
-            $("#randomTriangle").hide();
+            $("#customRandom").hide();
 
             $("#btnRandom").click((function () {
                 $("#random").show();
@@ -39,9 +38,8 @@ define(["jquery", "BufferLineGeometry", "BufferTriangleGeometry", "BufferGeometr
                 $("#tranguloidTrefoil").hide();
                 $("#ellipsoidWithFill").hide();
                 $("#ellipsoid").hide();
-                $("#randomTriangle").hide();
+                $("#customRandom").hide();
             }));
-
             $("#btnBand").click((function () {
                 $("#random").hide();
                 $("#band").show();
@@ -50,9 +48,8 @@ define(["jquery", "BufferLineGeometry", "BufferTriangleGeometry", "BufferGeometr
                 $("#tranguloidTrefoil").hide();
                 $("#ellipsoidWithFill").hide();
                 $("#ellipsoid").hide();
-                $("#randomTriangle").hide();
+                $("#customRandom").hide();
             }));
-
             $("#btnParametricSurface").click((function () {
                 $("#random").hide();
                 $("#band").hide();
@@ -61,9 +58,8 @@ define(["jquery", "BufferLineGeometry", "BufferTriangleGeometry", "BufferGeometr
                 $("#tranguloidTrefoil").hide();
                 $("#ellipsoidWithFill").hide();
                 $("#ellipsoid").hide();
-                $("#randomTriangle").hide();
+                $("#customRandom").hide();
             }));
-
             $("#btnEllipsoid").click((function () {
                 $("#random").hide();
                 $("#band").hide();
@@ -72,7 +68,7 @@ define(["jquery", "BufferLineGeometry", "BufferTriangleGeometry", "BufferGeometr
                 $("#tranguloidTrefoil").hide();
                 $("#ellipsoidWithFill").hide();
                 $("#ellipsoid").show();
-                $("#randomTriangle").hide();
+                $("#customRandom").hide();
             }));
             $("#btnEllipsoidWithFill").click((function () {
                 $("#random").hide();
@@ -82,9 +78,9 @@ define(["jquery", "BufferLineGeometry", "BufferTriangleGeometry", "BufferGeometr
                 $("#tranguloidTrefoil").hide();
                 $("#ellipsoidWithFill").show();
                 $("#ellipsoid").hide();
-                $("#randomTriangle").hide();
+                $("#customRandom").hide();
             }));
-            $("#btnRandomTriangle").click((function () {
+            $("#btnCustomRandom").click((function () {
                 $("#random").hide();
                 $("#band").hide();
                 $("#parametricSurface").hide();
@@ -92,7 +88,7 @@ define(["jquery", "BufferLineGeometry", "BufferTriangleGeometry", "BufferGeometr
                 $("#tranguloidTrefoil").hide();
                 $("#ellipsoidWithFill").hide();
                 $("#ellipsoid").hide();
-                $("#randomTriangle").show();
+                $("#customRandom").show();
             }));
             $("#btnDinis").click((function () {
                 $("#random").hide();
@@ -102,7 +98,7 @@ define(["jquery", "BufferLineGeometry", "BufferTriangleGeometry", "BufferGeometr
                 $("#tranguloidTrefoil").hide();
                 $("#ellipsoidWithFill").hide();
                 $("#ellipsoid").hide();
-                $("#randomTriangle").hide();
+                $("#customRandom").hide();
             }));
             $("#btnTranguloidTrefoil").click((function () {
                 $("#random").hide();
@@ -112,22 +108,22 @@ define(["jquery", "BufferLineGeometry", "BufferTriangleGeometry", "BufferGeometr
                 $("#tranguloidTrefoil").show();
                 $("#ellipsoidWithFill").hide();
                 $("#ellipsoid").hide();
-                $("#randomTriangle").hide();
+                $("#customRandom").hide();
             }));
 
 
             $("#btnNewRandom").click((function () {
 
                 var numPoints = parseInt($("#numItems").attr("value"));
+
                 var random = new Random(numPoints);
-                var bufferGeometryRandom = new BufferGeometry();
+                var bufferGeometryRandom = getBufferGeometry();
+
                 bufferGeometryRandom.addAttribute("position", random.getPositions());
                 bufferGeometryRandom.addAttribute("color", random.getColors());
 
                 scene.addBufferGeometry(bufferGeometryRandom);
             }));
-
-
             $("#btnNewBand").click((function () {
 
                 var config = {
@@ -136,26 +132,42 @@ define(["jquery", "BufferLineGeometry", "BufferTriangleGeometry", "BufferGeometr
                     height: parseInt($("#height").attr("value"))
                 };
 
-
                 var band = new Band(config);
-                var bufferGeometryBand = new BufferGeometry();
+                var bufferGeometryBand = getBufferGeometry();
+
                 bufferGeometryBand.addAttribute("position", band.getPositions());
                 bufferGeometryBand.addAttribute("color", band.getColors());
 
                 scene.addBufferGeometry(bufferGeometryBand);
             }));
-
             $("#btnNewParametricSurface").click((function () {
                 var a = parseFloat($("#aPara").attr("value"));
                 var b = parseFloat($("#bPara").attr("value"));
                 var c = parseFloat($("#cPara").attr("value"));
+                //var xUV = eval($("#xPara").val());
+                //var yUV = eval($("#yPara").val());
+                //var zUV = eval($("#zPara").val());
 
 
                 var pos = function (u, v) {
-                    return {
-                        x: a * Math.cos(u) * Math.sin(v),
-                        y: b * Math.sin(u) * Math.sin(v),
-                        z: c * Math.cos(v)
+                    try {
+                        return {
+                            x: eval($("#xPara").attr("value")),
+                            y: eval($("#yPara").attr("value")),
+                            z: eval($("#zPara").attr("value"))
+                        }
+                    } catch (err) {
+                        console.log("xUV || yUV || zUV --> Formel wurde falsch eingegeben (Wurde vllt 'Math.' " +
+                            "vergessen?! Standardformel einer Kugel wird genutzt.\n" +
+                            "x: a * Math.cos(u) * Math.sin(v),\n" +
+                            "y: b * Math.sin(u) * Math.sin(v),\n" +
+                            "z: c * Math.cos(v) ");
+                        return {
+                            x: a * Math.cos(u) * Math.sin(v),
+                            y: b * Math.sin(u) * Math.sin(v),
+                            z: c * Math.cos(v)
+                        }
+
                     }
                 };
 
@@ -171,18 +183,172 @@ define(["jquery", "BufferLineGeometry", "BufferTriangleGeometry", "BufferGeometr
                 };
 
                 var parametricSurface = new ParametricSurface(pos, config);
+                var bufferGeometryParametricSurface = getBufferGeometry();
 
+                bufferGeometryParametricSurface.addAttribute("position", parametricSurface.getPositions());
+                bufferGeometryParametricSurface.addAttribute("color", parametricSurface.getColors());
+
+                scene.addBufferGeometry(bufferGeometryParametricSurface);
+
+            }));
+            $("#btnNewDinis").click((function () {
+                var a = parseFloat($("#aDinis").attr("value"));
+                var b = parseFloat($("#bDinis").attr("value"));
+
+                var pos = function (u, v) {
+                    return {
+                        x: a * Math.cos(u) * Math.sin(v),
+                        y: a * Math.sin(u) * Math.sin(v),
+                        z: a * (Math.cos(v) + Math.log(Math.tan(v / 2))) + b * u
+                    }
+                };
+
+                var config = {
+                    uSeg: parseInt($("#uSegDinis").attr("value")),
+                    vSeg: parseInt($("#vSegDinis").attr("value")),
+                    uMin: parseFloat($("#uMinDinis").attr("value")),
+                    uMax: parseFloat($("#uMaxDinis").attr("value")),
+                    vMin: parseFloat($("#vMinDinis").attr("value")),
+                    vMax: parseFloat($("#vMaxDinis").attr("value")),
+                    scale: parseInt($("#dinisScale").attr("value"))
+                };
+
+                var dinis = new ParametricSurface(pos, config);
+                var bufferGeometryDinis = getBufferGeometry();
+
+                bufferGeometryDinis.addAttribute("position", dinis.getPositions());
+                bufferGeometryDinis.addAttribute("color", dinis.getColors());
+                scene.addBufferGeometry(bufferGeometryDinis);
+            }));
+            $("#btnNewTranguloidTrefoil").click((function () {
+
+                var pos = function (u, v) {
+                    return {
+                        x: 2 * Math.sin(3 * u) / (2 + Math.cos(v)),
+                        y: 2 * (Math.sin(u) + 2 * Math.sin(2 * u)) / (2 + Math.cos(v + 2 * Math.PI / 3)),
+                        z: (Math.cos(u) - 2 * Math.cos(2 * u)) * (2 * Math.cos(v)) *
+                        (2 + Math.cos(v + 2 * Math.PI / 3)) / 4
+                    }
+                };
+
+                var config = {
+                    uSeg: parseInt($("#uSegTranguloidTrefoil").attr("value")),
+                    vSeg: parseInt($("#vSegTranguloidTrefoil").attr("value")),
+                    uMin: parseFloat($("#uMinTranguloidTrefoil").attr("value")),
+                    uMax: parseFloat($("#uMaxTranguloidTrefoil").attr("value")),
+                    vMin: parseFloat($("#vMinTranguloidTrefoil").attr("value")),
+                    vMax: parseFloat($("#vMaxTranguloidTrefoil").attr("value")),
+                    scale: parseInt($("#tranguloidTrefoilScale").attr("value"))
+                };
+
+                var tranguloid = new ParametricSurface(pos, config);
+                var bufferGeometryTranguloid = getBufferGeometry();
+
+                bufferGeometryTranguloid.addAttribute("position", tranguloid.getPositions());
+                bufferGeometryTranguloid.addAttribute("color", tranguloid.getColors());
+
+                scene.addBufferGeometry(bufferGeometryTranguloid);
+            }));
+            $("#btnNewEllipsoid").click((function () {
+
+                var pos = function (u, v) {
+                    return {
+                        x: Math.cos(u) * Math.sin(v),
+                        y: 0.2 * Math.sin(u) * Math.sin(v),
+                        z: 0.5 * Math.cos(v)
+                    }
+                };
+
+                var config = {
+                    uSeg: parseInt($("#uSegEllipsoid").attr("value")),
+                    vSeg: parseInt($("#vSegEllipsoid").attr("value")),
+                    scale: parseInt($("#ellipsoidScale").attr("value"))
+                };
+
+                var ellipsoid = new ParametricSurface(pos, config);
+                var bufferGeometryEllipsoid = getBufferGeometry();
+
+                bufferGeometryEllipsoid.addAttribute("position", ellipsoid.getPositions());
+                bufferGeometryEllipsoid.addAttribute("color", ellipsoid.getColors());
+
+                scene.addBufferGeometry(bufferGeometryEllipsoid);
+            }));
+            $("#btnNewEllipsoidWithFill").click((function () {
+
+                var pos = function (u, v) {
+                    return {
+                        x: Math.cos(u) * Math.sin(v),
+                        y: 0.2 * Math.sin(u) * Math.sin(v),
+                        z: 0.5 * Math.cos(v)
+                    }
+                };
+
+                var config = {
+                    uSeg: parseInt($("#uSegEllipsoidWithFill").attr("value")),
+                    vSeg: parseInt($("#vSegEllipsoidWithFill").attr("value")),
+                    scale: parseInt($("#ellipsoidWithFillScale").attr("value"))
+                };
+
+                var ellipsoid = new Ellipsoid_withObjFilling(pos, config);
+                var bufferGeometryEllipsoid = getBufferGeometry();
+
+                bufferGeometryEllipsoid.addAttribute("position", ellipsoid.getPositions());
+                bufferGeometryEllipsoid.addAttribute("color", ellipsoid.getColors());
+
+                scene.addBufferGeometry(bufferGeometryEllipsoid);
+            }));
+            $("#btnNewCustomRandom").click((function () {
+
+                var numPoints = parseInt($("#numItemsCustomRandom").attr("value"));
+                var triangleSize = parseInt($("#customRandomSize").attr("value"));
+
+                var customRandom = new Random_Triangle(numPoints, triangleSize);
+                var bufferGeometryCustomRandom = getBufferGeometry();
+
+                bufferGeometryCustomRandom.addAttribute("position", customRandom.getPositions());
+                bufferGeometryCustomRandom.addAttribute("normal", customRandom.getNormals());
+                bufferGeometryCustomRandom.addAttribute("color", customRandom.getColors());
+
+                scene.addBufferGeometry(bufferGeometryCustomRandom);
+            }));
+            $("#anim").click((function () {
+                if ($("#anim").attr('checked')) {
+                    animate();
+                    //console.log("start");
+                } else {
+                    //console.log("stop");
+                    stopAnimate();
+                }
+            }));
+
+            var ani;
+            function animate() {
+                scene.letAnim(true);
+                ani = requestAnimationFrame(animate);
+            }
+            function stopAnimate() {
+                cancelAnimationFrame(ani);
+            }
+
+            $("#btnRemoveObj").click((function () {
+                scene.removeBufferGeogemtry();
+            }));
+
+            var getBufferGeometry = function () {
                 if ($("#matPoint").attr('checked') || $("#matLine").attr('checked') ||
                     $("#matTriangle").attr('checked')) {
 
-                    var bufferGeometryParametricSurface;
+                    var bufferGeometry;
 
-                    if ($("#matPoint").attr('checked') && !( $("#matLine").attr('checked') || $("#matTriangle").attr('checked') )) {
-                        bufferGeometryParametricSurface = new BufferGeometry();
-                    } else if ($("#matLine").attr('checked') && !( $("#matPoint").attr('checked') || $("#matTriangle").attr('checked') )) {
-                        bufferGeometryParametricSurface = new BufferLineGeometry();
-                    } else if ($("#matTriangle").attr('checked') && !( $("#matLine").attr('checked') || $("#matPoint").attr('checked') )) {
-                        bufferGeometryParametricSurface = new BufferTriangleGeometry();
+                    if ($("#matPoint").attr('checked') && !( $("#matLine").attr('checked') ||
+                        $("#matTriangle").attr('checked') )) {
+                        bufferGeometry = new BufferGeometry();
+                    } else if ($("#matLine").attr('checked') && !( $("#matPoint").attr('checked') ||
+                        $("#matTriangle").attr('checked') )) {
+                        bufferGeometry = new BufferLineGeometry();
+                    } else if ($("#matTriangle").attr('checked') && !( $("#matLine").attr('checked') ||
+                        $("#matPoint").attr('checked') )) {
+                        bufferGeometry = new BufferTriangleGeometry();
                     } else if ($("#matPoint").attr('checked') &&
                         $("#matLine").attr('checked') && !($("#matTriangle").attr('checked') )) {
                         // Point- und Line-Materialien wurden ausgewählt
@@ -204,347 +370,19 @@ define(["jquery", "BufferLineGeometry", "BufferTriangleGeometry", "BufferGeometr
                         console.log("alle drei Materialien wurden ausgewählt");
                     }
 
+                    return bufferGeometry;
 
-                    bufferGeometryParametricSurface.addAttribute("position", parametricSurface.getPositions());
-                    bufferGeometryParametricSurface.addAttribute("color", parametricSurface.getColors());
-
-                    scene.addBufferGeometry(bufferGeometryParametricSurface);
                 } else {
-                    alert("Es muss ein Material gewählt worden sein.");
+                    //return a PointBufferGeometry
+                    console.log("POINTBufferGeometry");
+                    return new BufferGeometry();
                 }
-
-            }));
-
-            $("#btnNewDinis").click((function () {
-                var a = parseFloat($("#aDinis").attr("value"));
-                var b = parseFloat($("#bDinis").attr("value"));
-
-                var pos = function (u, v) {
-                    return {
-                        x: a * Math.cos(u) * Math.sin(v),
-                        y: a * Math.sin(u) * Math.sin(v),
-                        z: a * (Math.cos(v) + Math.log(Math.tan(v/2))) + b * u
-                    }
-                };
-
-                var config = {
-                    uSeg: parseInt($("#uSegDinis").attr("value")),
-                    vSeg: parseInt($("#vSegDinis").attr("value")),
-                    uMin: parseFloat($("#uMinDinis").attr("value")),
-                    uMax: parseFloat($("#uMaxDinis").attr("value")),
-                    vMin: parseFloat($("#vMinDinis").attr("value")),
-                    vMax: parseFloat($("#vMaxDinis").attr("value")),
-                    scale: parseInt($("#dinisScale").attr("value"))
-                };
-
-                var ellipsoid = new ParametricSurface(pos, config);
-
-                if ($("#matPointDinis").attr('checked') || $("#matLineDinis").attr('checked') ||
-                    $("#matTriangleDinis").attr('checked')) {
-                    var bufferGeometryParametricSurface;
-
-                    if ($("#matPointDinis").attr('checked') && !( $("#matLineDinis").attr('checked') ||
-                        $("#matTriangleDinis").attr('checked') )) {
-                        bufferGeometryParametricSurface = new BufferGeometry();
-                    } else if ($("#matLineDinis").attr('checked') && !( $("#matPointDinis").attr('checked') ||
-                        $("#matTriangleDinis").attr('checked') )) {
-                        bufferGeometryParametricSurface = new BufferLineGeometry();
-                    } else if ($("#matTriangleDinis").attr('checked') && !( $("#matLineDinis").attr('checked') ||
-                        $("#matPointDinis").attr('checked') )) {
-                        bufferGeometryParametricSurface = new BufferTriangleGeometry();
-                    } else if ($("#matPointDinis").attr('checked') &&
-                        $("#matLineDinis").attr('checked') && !($("#matTriangleDinis").attr('checked') )) {
-                        // Point- und Line-Materialien wurden ausgewählt
-                        alert("Diesen Feature ist zur Zeit noch nicht verfügbar.");
-                        console.log("Point- und Line-Materialien wurden ausgewählt");
-                    } else if ($("#matPointDinis").attr('checked') &&
-                        $("#matTriangleDinis").attr('checked') && !($("#matLineDinis").attr('checked') )) {
-                        // Point- und Triangle-Materialien wurden ausgewählt
-                        alert("Diesen Feature ist zur Zeit noch nicht verfügbar.");
-                        console.log("Point- und Triangle-Materialien wurden ausgewählt");
-                    } else if ($("#matTriangleDinis").attr('checked') &&
-                        $("#matLineDinis").attr('checked') && !($("#matPointDinis").attr('checked') )) {
-                        // Triangle- und Line-Materialien wurden ausgewählt
-                        alert("Diesen Feature ist zur Zeit noch nicht verfügbar.");
-                        console.log("Triangle- und Line-Materialien wurden ausgewählt");
-                    } else {
-                        // alle drei Materialien wurden ausgewählt
-                        alert("Diesen Feature ist zur Zeit noch nicht verfügbar.");
-                        console.log("alle drei Materialien wurden ausgewählt");
-                    }
-
-
-                    bufferGeometryParametricSurface.addAttribute("position", ellipsoid.getPositions());
-                    bufferGeometryParametricSurface.addAttribute("color", ellipsoid.getColors());
-                    scene.addBufferGeometry(bufferGeometryParametricSurface);
-                } else {
-                    alert("Es muss ein Material gewählt worden sein.");
-                }
-            }));
-
-            $("#btnNewTranguloidTrefoil").click((function () {
-
-                var pos = function (u, v) {
-                    return {
-                        x: 2 * Math.sin(3*u) /  (2 + Math.cos(v)),
-                        y: 2 * (Math.sin(u) + 2 * Math.sin(2*u)) / (2 + Math.cos(v + 2 * Math.PI / 3)),
-                        z: (Math.cos(u) - 2* Math.cos(2 * u)) * (2 * Math.cos(v)) *
-                        (2 + Math.cos(v + 2 * Math.PI/3)) / 4
-                    }
-                };
-
-                var config = {
-                    uSeg: parseInt($("#uSegTranguloidTrefoil").attr("value")),
-                    vSeg: parseInt($("#vSegTranguloidTrefoil").attr("value")),
-                    uMin: parseFloat($("#uMinTranguloidTrefoil").attr("value")),
-                    uMax: parseFloat($("#uMaxTranguloidTrefoil").attr("value")),
-                    vMin: parseFloat($("#vMinTranguloidTrefoil").attr("value")),
-                    vMax: parseFloat($("#vMaxTranguloidTrefoil").attr("value")),
-                    scale: parseInt($("#tranguloidTrefoilScale").attr("value"))
-                };
-
-                var ellipsoid = new ParametricSurface(pos, config);
-
-                if ($("#matPointTranguloidTrefoil").attr('checked') ||
-                    $("#matLineTranguloidTrefoil").attr('checked') ||
-                    $("#matTriangleTranguloidTrefoil").attr('checked')) {
-                    var bufferGeometryParametricSurface;
-
-                    if ($("#matPointTranguloidTrefoil").attr('checked') &&
-                        !( $("#matLineTranguloidTrefoil").attr('checked') ||
-                        $("#matTriangleTranguloidTrefoil").attr('checked') )) {
-                        bufferGeometryParametricSurface = new BufferGeometry();
-                    } else if ($("#matLineTranguloidTrefoil").attr('checked') &&
-                        !( $("#matPointTranguloidTrefoil").attr('checked') ||
-                        $("#matTriangleTranguloidTrefoil").attr('checked') )) {
-                        bufferGeometryParametricSurface = new BufferLineGeometry();
-                    } else if ($("#matTriangleTranguloidTrefoil").attr('checked') &&
-                        !( $("#matLineTranguloidTrefoil").attr('checked') ||
-                        $("#matPointTranguloidTrefoil").attr('checked') )) {
-                        bufferGeometryParametricSurface = new BufferTriangleGeometry();
-                    } else if ($("#matPointTranguloidTrefoil").attr('checked') &&
-                        $("#matLineTranguloidTrefoil").attr('checked') &&
-                        !($("#matTriangleTranguloidTrefoil").attr('checked') )) {
-                        // Point- und Line-Materialien wurden ausgewählt
-                        alert("Diesen Feature ist zur Zeit noch nicht verfügbar.");
-                        console.log("Point- und Line-Materialien wurden ausgewählt");
-                    } else if ($("#matPointTranguloidTrefoil").attr('checked') &&
-                        $("#matTriangleTranguloidTrefoil").attr('checked') &&
-                        !($("#matLineTranguloidTrefoil").attr('checked') )) {
-                        // Point- und Triangle-Materialien wurden ausgewählt
-                        alert("Diesen Feature ist zur Zeit noch nicht verfügbar.");
-                        console.log("Point- und Triangle-Materialien wurden ausgewählt");
-                    } else if ($("#matTriangleTranguloidTrefoil").attr('checked') &&
-                        $("#matLineTranguloidTrefoil").attr('checked') &&
-                        !($("#matPointTranguloidTrefoil").attr('checked') )) {
-                        // Triangle- und Line-Materialien wurden ausgewählt
-                        alert("Diesen Feature ist zur Zeit noch nicht verfügbar.");
-                        console.log("Triangle- und Line-Materialien wurden ausgewählt");
-                    } else {
-                        // alle drei Materialien wurden ausgewählt
-                        alert("Diesen Feature ist zur Zeit noch nicht verfügbar.");
-                        console.log("alle drei Materialien wurden ausgewählt");
-                    }
-
-
-                    bufferGeometryParametricSurface.addAttribute("position", ellipsoid.getPositions());
-                    bufferGeometryParametricSurface.addAttribute("color", ellipsoid.getColors());
-                    scene.addBufferGeometry(bufferGeometryParametricSurface);
-                } else {
-                    alert("Es muss ein Material gewählt worden sein.");
-                }            }));
-
-            $("#btnNewEllipsoid").click((function () {
-
-                var pos = function (u, v) {
-                    return {
-                        x: Math.cos(u) * Math.sin(v),
-                        y: 0.2 * Math.sin(u) * Math.sin(v),
-                        z: 0.5 * Math.cos(v)
-                    }
-                };
-
-                var config = {
-                    uSeg: parseInt($("#uSegEllipsoid").attr("value")),
-                    vSeg: parseInt($("#vSegEllipsoid").attr("value")),
-                    scale: parseInt($("#ellipsoidScale").attr("value"))
-                };
-
-                var ellipsoid = new ParametricSurface(pos, config);
-
-                if ($("#matPointEllipsoid").attr('checked') || $("#matLineEllipsoid").attr('checked') ||
-                    $("#matTriangleEllipsoid").attr('checked')) {
-                    var bufferGeometryParametricSurface;
-
-                    if ($("#matPointEllipsoid").attr('checked') && !( $("#matLineEllipsoid").attr('checked') ||
-                        $("#matTriangleEllipsoid").attr('checked') )) {
-                        bufferGeometryParametricSurface = new BufferGeometry();
-                    } else if ($("#matLineEllipsoid").attr('checked') && !( $("#matPointEllipsoid").attr('checked') ||
-                        $("#matTriangleEllipsoid").attr('checked') )) {
-                        bufferGeometryParametricSurface = new BufferLineGeometry();
-                    } else if ($("#matTriangleEllipsoid").attr('checked') && !( $("#matLineEllipsoid").attr('checked') ||
-                        $("#matPointEllipsoid").attr('checked') )) {
-                        bufferGeometryParametricSurface = new BufferTriangleGeometry();
-                    } else if ($("#matPointEllipsoid").attr('checked') &&
-                        $("#matLineEllipsoid").attr('checked') && !($("#matTriangleEllipsoid").attr('checked') )) {
-                        // Point- und Line-Materialien wurden ausgewählt
-                        alert("Diesen Feature ist zur Zeit noch nicht verfügbar.");
-                        console.log("Point- und Line-Materialien wurden ausgewählt");
-                    } else if ($("#matPointEllipsoid").attr('checked') &&
-                        $("#matTriangleEllipsoid").attr('checked') && !($("#matLineEllipsoid").attr('checked') )) {
-                        // Point- und Triangle-Materialien wurden ausgewählt
-                        alert("Diesen Feature ist zur Zeit noch nicht verfügbar.");
-                        console.log("Point- und Triangle-Materialien wurden ausgewählt");
-                    } else if ($("#matTriangleEllipsoid").attr('checked') &&
-                        $("#matLineEllipsoid").attr('checked') && !($("#matPointEllipsoid").attr('checked') )) {
-                        // Triangle- und Line-Materialien wurden ausgewählt
-                        alert("Diesen Feature ist zur Zeit noch nicht verfügbar.");
-                        console.log("Triangle- und Line-Materialien wurden ausgewählt");
-                    } else {
-                        // alle drei Materialien wurden ausgewählt
-                        alert("Diesen Feature ist zur Zeit noch nicht verfügbar.");
-                        console.log("alle drei Materialien wurden ausgewählt");
-                    }
-
-
-                    bufferGeometryParametricSurface.addAttribute("position", ellipsoid.getPositions());
-                    bufferGeometryParametricSurface.addAttribute("color", ellipsoid.getColors());
-                    scene.addBufferGeometry(bufferGeometryParametricSurface);
-                } else {
-                    alert("Es muss ein Material gewählt worden sein.");
-                }
-            }));
-
-            $("#btnNewEllipsoidWithFill").click((function () {
-
-                var pos = function (u, v) {
-                    return {
-                        x: Math.cos(u) * Math.sin(v),
-                        y: 0.2 * Math.sin(u) * Math.sin(v),
-                        z: 0.5 * Math.cos(v)
-                    }
-                };
-
-                var config = {
-                    uSeg: parseInt($("#uSegEllipsoidWithFill").attr("value")),
-                    vSeg: parseInt($("#vSegEllipsoidWithFill").attr("value")),
-                    scale: parseInt($("#ellipsoidWithFillScale").attr("value"))
-                };
-
-                var ellipsoid = new Ellipsoid_withObjFilling(pos, config);
-
-                if ($("#matPointEllipsoidWithFill").attr('checked') || $("#matLineEllipsoidWithFill").attr('checked') ||
-                    $("#matTriangleEllipsoidWithFill").attr('checked')) {
-
-                    var bufferGeometryParametricSurface;
-
-                    if ($("#matPointEllipsoidWithFill").attr('checked') && !( $("#matLineEllipsoidWithFill").attr('checked') ||
-                        $("#matTriangleEllipsoidWithFill").attr('checked') )) {
-                        bufferGeometryParametricSurface = new BufferGeometry();
-                    } else if ($("#matLineEllipsoidWithFill").attr('checked') && !( $("#matPointEllipsoidWithFill").attr('checked') ||
-                        $("#matTriangleEllipsoidWithFill").attr('checked') )) {
-                        bufferGeometryParametricSurface = new BufferLineGeometry();
-                    } else if ($("#matTriangleEllipsoidWithFill").attr('checked') && !( $("#matLineEllipsoidWithFill").attr('checked') ||
-                        $("#matPointEllipsoidWithFill").attr('checked') )) {
-                        bufferGeometryParametricSurface = new BufferTriangleGeometry();
-                    } else if ($("#matPointEllipsoidWithFill").attr('checked') &&
-                        $("#matLineEllipsoidWithFill").attr('checked') && !($("#matTriangleEllipsoidWithFill").attr('checked') )) {
-                        // Point- und Line-Materialien wurden ausgewählt
-                        alert("Diesen Feature ist zur Zeit noch nicht verfügbar.");
-                        console.log("Point- und Line-Materialien wurden ausgewählt");
-                    } else if ($("#matPointEllipsoidWithFill").attr('checked') &&
-                        $("#matTriangleEllipsoidWithFill").attr('checked') && !($("#matLineEllipsoidWithFill").attr('checked') )) {
-                        // Point- und Triangle-Materialien wurden ausgewählt
-                        alert("Diesen Feature ist zur Zeit noch nicht verfügbar.");
-                        console.log("Point- und Triangle-Materialien wurden ausgewählt");
-                    } else if ($("#matTriangleEllipsoidWithFill").attr('checked') &&
-                        $("#matLineEllipsoidWithFill").attr('checked') && !($("#matPointEllipsoidWithFill").attr('checked') )) {
-                        // Triangle- und Line-Materialien wurden ausgewählt
-                        alert("Diesen Feature ist zur Zeit noch nicht verfügbar.");
-                        console.log("Triangle- und Line-Materialien wurden ausgewählt");
-                    } else {
-                        // alle drei Materialien wurden ausgewählt
-                        alert("Diesen Feature ist zur Zeit noch nicht verfügbar.");
-                        console.log("alle drei Materialien wurden ausgewählt");
-                    }
-
-
-                    bufferGeometryParametricSurface.addAttribute("position", ellipsoid.getPositions());
-                    bufferGeometryParametricSurface.addAttribute("color", ellipsoid.getColors());
-
-                    scene.addBufferGeometry(bufferGeometryParametricSurface);
-                } else {
-                    alert("Es muss ein Material gewählt worden sein.");
-                }
-
-            }));
-
-            /*$("#btnNewEllipsoidTriangle").click((function () {
-
-                var pos = function (u, v) {
-                    return {
-                        x: Math.cos(u) * Math.sin(v),
-                        y: 0.2 * Math.sin(u) * Math.sin(v),
-                        z: 0.5 * Math.cos(v)
-                    }
-                };
-
-                var config = {
-                    uSeg: parseInt($("#uSegEllipsoidTriangle").attr("value")),
-                    vSeg: parseInt($("#vSegEllipsoidTriangle").attr("value")),
-                    scale: parseInt($("#ellipsoidTriangleScale").attr("value")),
-                    size: parseInt($("#ellipsoidTriangleSize").attr("value"))
-                };
-
-
-                var ellipsoid = new Ellipsoid_withObjFilling(pos, config);
-                var bufferGeometryEllipsoid = new BufferTriangleGeometry();
-                bufferGeometryEllipsoid.addAttribute("position", ellipsoid.getPositions());
-                bufferGeometryEllipsoid.addAttribute("color", ellipsoid.getColors());
-
-                scene.addBufferGeometry(bufferGeometryEllipsoid);
-            }));*/
-
-            $("#btnNewRandomTriangle").click((function () {
-
-                var numPoints = parseInt($("#numItemsTriangle").attr("value"));
-                var triangleSize = parseInt($("#triangleSize").attr("value"));
-
-                var randomTriangles = new Random_Triangle(numPoints, triangleSize);
-                var bufferGeometryRandomTriangles = new BufferTriangleGeometry();
-                bufferGeometryRandomTriangles.addAttribute("position", randomTriangles.getPositions());
-                bufferGeometryRandomTriangles.addAttribute("normal", randomTriangles.getNormals());
-                bufferGeometryRandomTriangles.addAttribute("color", randomTriangles.getColors());
-
-                scene.addBufferGeometry(bufferGeometryRandomTriangles);
-            }));
-
-            $("#anim").click((function () {
-                if ($("#anim").attr('checked')) {
-                    animate();
-                    //console.log("start");
-                } else {
-                    //console.log("stop");
-                    stopAnimate();
-                }
-            }));
-
-            var ani;
-            function animate() {
-                scene.letAnim(true);
-                ani = requestAnimationFrame(animate);
             }
-
-            function stopAnimate() {
-                cancelAnimationFrame(ani);
-            }
-
 
         };
 
-// return the constructor function
+        // return the constructor function
         return HtmlController;
-
 
     }))
 ; // require

@@ -39,26 +39,31 @@ define(["three", "util", "shaders", "BufferGeometry", "BufferLineGeometry", "Buf
 
 
             function onDocumentKeyDown(event) {
-                // Get the key code of the pressed key
-                var keyCode = event.which;
+                if (scope.currentMesh != undefined) {
+                    // Get the key code of the pressed key
+                    var keyCode = event.which;
 
-                if (keyCode == 38) {
-                    console.log("cursor up");
-                    scope.currentMesh.rotation.x += 0.05;
-                    // Cursor down
-                } else if (keyCode == 40) {
-                    console.log("cursor down");
-                    scope.currentMesh.rotation.x += -0.05;
-                    // Cursor left
-                } else if (keyCode == 37) {
-                    console.log("cursor left");
-                    scope.currentMesh.rotation.y += 0.05;
-                    // Cursor right
-                } else if (keyCode == 39) {
-                    console.log("cursor right");
-                    scope.currentMesh.rotation.y += -0.05;
-                    // Cursor up
+                    if (keyCode == 38) {
+                        console.log("cursor up");
+                        scope.currentMesh.rotation.x += 0.05;
+                        // Cursor down
+                    } else if (keyCode == 40) {
+                        console.log("cursor down");
+                        scope.currentMesh.rotation.x += -0.05;
+                        // Cursor left
+                    } else if (keyCode == 37) {
+                        console.log("cursor left");
+                        scope.currentMesh.rotation.y += 0.05;
+                        // Cursor right
+                    } else if (keyCode == 39) {
+                        console.log("cursor right");
+                        scope.currentMesh.rotation.y += -0.05;
+                        // Cursor up
+                    }
+                } else {
+                    console.log("I don´t have an obj!");
                 }
+
             };
 
             this.addBufferGeometry = function (bufferGeometry) {
@@ -67,7 +72,7 @@ define(["three", "util", "shaders", "BufferGeometry", "BufferLineGeometry", "Buf
                 scope.scene.add(scope.currentMesh);
                 this.addLights(true);
 
-            }
+            };
 
             this.addLights = function (lights) {
                 if (lights) {
@@ -83,7 +88,19 @@ define(["three", "util", "shaders", "BufferGeometry", "BufferLineGeometry", "Buf
                 }else{
                     //scope.scene.add(new THREE.AmbientLight(0xcccccc));
                 }
-            }
+            };
+
+            this.removeLights = function () {
+                scope.scene.add(new THREE.AmbientLight(0x444444));
+
+                var light1 = new THREE.DirectionalLight(0x000000, 0.5);
+                light1.position.set(1, 1, 1);
+                scope.scene.add(light1);
+
+                var light2 = new THREE.DirectionalLight(0x000000, 1.5);
+                light2.position.set(0, -1, 0);
+                scope.scene.add(light2);
+            };
 
             this.letAnim = function (anim) {
                 if (scope.currentMesh != undefined) {
@@ -94,7 +111,17 @@ define(["three", "util", "shaders", "BufferGeometry", "BufferLineGeometry", "Buf
                 } else {
                     console.log("I don´t have an obj!");
                 }
-            }
+            };
+
+            this.removeBufferGeogemtry = function(){
+                if (scope.currentMesh != undefined) {
+                    scope.scene.remove(scope.currentMesh);
+                    this.removeLights(); // das funktionier noch nicht richtig, man merkt es beim wiederholten
+                    // erstellen einer Geometrie mit einem Dreickmaterial
+                } else {
+                    console.log("I don´t have an obj!");
+                }
+            };
 
             /*
              * drawing the scene

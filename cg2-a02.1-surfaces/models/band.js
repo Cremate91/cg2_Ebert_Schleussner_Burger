@@ -39,7 +39,7 @@ define(["three"],
                 // Y coordinates are simply -height/2 and +height/2
                 var y0 = height/2;
                 var y1 = -height/2;
-                console.log("[" + x + ", " + y0 + ", " + z + "] -- [" + x + ", " + y1 + ", " + z + "]");
+                //console.log("[" + x + ", " + y0 + ", " + z + "] -- [" + x + ", " + y1 + ", " + z + "]");
 
                 // add two points for each position on the circle
                 // IMPORTANT: push each float value separately!
