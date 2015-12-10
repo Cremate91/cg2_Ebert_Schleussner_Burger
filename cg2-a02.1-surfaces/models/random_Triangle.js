@@ -52,9 +52,11 @@ define(["three"],
                 this.positions[ i ]     = ax;
                 this.positions[ i + 1 ] = ay;
                 this.positions[ i + 2 ] = az;
+
                 this.positions[ i + 3 ] = bx;
                 this.positions[ i + 4 ] = by;
                 this.positions[ i + 5 ] = bz;
+
                 this.positions[ i + 6 ] = cx;
                 this.positions[ i + 7 ] = cy;
                 this.positions[ i + 8 ] = cz;

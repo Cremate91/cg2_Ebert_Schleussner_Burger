@@ -56,7 +56,6 @@ define(["three"],
                 this.colors[ i ]     = color.r;
                 this.colors[ i + 1 ] = color.g;
                 this.colors[ i + 2 ] = color.b;
-
             }
 
             this.getPositions = function() {

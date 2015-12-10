@@ -11,8 +11,8 @@
 
 
 /* requireJS module definition */
-define(["jquery", "BufferLineGeometry", "BufferTriangleGeometry", "BufferGeometry", "random", "band", "parametricSurface", "ellipsoid_withObjFilling", "random_Triangle"],
-    (function ($, BufferLineGeometry, BufferTriangleGeometry, BufferGeometry, Random, Band, ParametricSurface, Ellipsoid_withObjFilling, Random_Triangle) {
+define(["jquery", "BufferGeometry", "random", "band", "parametricSurface", "ellipsoid_withObjFilling", "random_Triangle"],
+    (function ($, BufferGeometry, Random, Band, ParametricSurface, Ellipsoid_withObjFilling, Random_Triangle) {
         "use strict";
 
         /*
@@ -117,10 +117,7 @@ define(["jquery", "BufferLineGeometry", "BufferTriangleGeometry", "BufferGeometr
                 var numPoints = parseInt($("#numItems").attr("value"));
 
                 var random = new Random(numPoints);
-                var bufferGeometryRandom = getBufferGeometry();
-
-                bufferGeometryRandom.addAttribute("position", random.getPositions());
-                bufferGeometryRandom.addAttribute("color", random.getColors());
+                var bufferGeometryRandom = getBufferGeometry(random);
 
                 scene.addBufferGeometry(bufferGeometryRandom);
             }));
@@ -133,10 +130,7 @@ define(["jquery", "BufferLineGeometry", "BufferTriangleGeometry", "BufferGeometr
                 };
 
                 var band = new Band(config);
-                var bufferGeometryBand = getBufferGeometry();
-
-                bufferGeometryBand.addAttribute("position", band.getPositions());
-                bufferGeometryBand.addAttribute("color", band.getColors());
+                var bufferGeometryBand = getBufferGeometry(band);
 
                 scene.addBufferGeometry(bufferGeometryBand);
             }));
@@ -183,10 +177,7 @@ define(["jquery", "BufferLineGeometry", "BufferTriangleGeometry", "BufferGeometr
                 };
 
                 var parametricSurface = new ParametricSurface(pos, config);
-                var bufferGeometryParametricSurface = getBufferGeometry();
-
-                bufferGeometryParametricSurface.addAttribute("position", parametricSurface.getPositions());
-                bufferGeometryParametricSurface.addAttribute("color", parametricSurface.getColors());
+                var bufferGeometryParametricSurface = getBufferGeometry(parametricSurface);
 
                 scene.addBufferGeometry(bufferGeometryParametricSurface);
 
@@ -214,10 +205,8 @@ define(["jquery", "BufferLineGeometry", "BufferTriangleGeometry", "BufferGeometr
                 };
 
                 var dinis = new ParametricSurface(pos, config);
-                var bufferGeometryDinis = getBufferGeometry();
+                var bufferGeometryDinis = getBufferGeometry(dinis);
 
-                bufferGeometryDinis.addAttribute("position", dinis.getPositions());
-                bufferGeometryDinis.addAttribute("color", dinis.getColors());
                 scene.addBufferGeometry(bufferGeometryDinis);
             }));
             $("#btnNewTranguloidTrefoil").click((function () {
@@ -242,10 +231,7 @@ define(["jquery", "BufferLineGeometry", "BufferTriangleGeometry", "BufferGeometr
                 };
 
                 var tranguloid = new ParametricSurface(pos, config);
-                var bufferGeometryTranguloid = getBufferGeometry();
-
-                bufferGeometryTranguloid.addAttribute("position", tranguloid.getPositions());
-                bufferGeometryTranguloid.addAttribute("color", tranguloid.getColors());
+                var bufferGeometryTranguloid = getBufferGeometry(tranguloid);
 
                 scene.addBufferGeometry(bufferGeometryTranguloid);
             }));
@@ -266,10 +252,7 @@ define(["jquery", "BufferLineGeometry", "BufferTriangleGeometry", "BufferGeometr
                 };
 
                 var ellipsoid = new ParametricSurface(pos, config);
-                var bufferGeometryEllipsoid = getBufferGeometry();
-
-                bufferGeometryEllipsoid.addAttribute("position", ellipsoid.getPositions());
-                bufferGeometryEllipsoid.addAttribute("color", ellipsoid.getColors());
+                var bufferGeometryEllipsoid = getBufferGeometry(ellipsoid);
 
                 scene.addBufferGeometry(bufferGeometryEllipsoid);
             }));
@@ -290,10 +273,7 @@ define(["jquery", "BufferLineGeometry", "BufferTriangleGeometry", "BufferGeometr
                 };
 
                 var ellipsoid = new Ellipsoid_withObjFilling(pos, config);
-                var bufferGeometryEllipsoid = getBufferGeometry();
-
-                bufferGeometryEllipsoid.addAttribute("position", ellipsoid.getPositions());
-                bufferGeometryEllipsoid.addAttribute("color", ellipsoid.getColors());
+                var bufferGeometryEllipsoid = getBufferGeometry(ellipsoid);
 
                 scene.addBufferGeometry(bufferGeometryEllipsoid);
             }));
@@ -303,11 +283,7 @@ define(["jquery", "BufferLineGeometry", "BufferTriangleGeometry", "BufferGeometr
                 var triangleSize = parseInt($("#customRandomSize").attr("value"));
 
                 var customRandom = new Random_Triangle(numPoints, triangleSize);
-                var bufferGeometryCustomRandom = getBufferGeometry();
-
-                bufferGeometryCustomRandom.addAttribute("position", customRandom.getPositions());
-                bufferGeometryCustomRandom.addAttribute("normal", customRandom.getNormals());
-                bufferGeometryCustomRandom.addAttribute("color", customRandom.getColors());
+                var bufferGeometryCustomRandom = getBufferGeometry(customRandom);
 
                 scene.addBufferGeometry(bufferGeometryCustomRandom);
             }));
@@ -322,10 +298,12 @@ define(["jquery", "BufferLineGeometry", "BufferTriangleGeometry", "BufferGeometr
             }));
 
             var ani;
+
             function animate() {
                 scene.letAnim(true);
                 ani = requestAnimationFrame(animate);
             }
+
             function stopAnimate() {
                 cancelAnimationFrame(ani);
             }
@@ -334,58 +312,93 @@ define(["jquery", "BufferLineGeometry", "BufferTriangleGeometry", "BufferGeometr
                 scene.removeBufferGeogemtry();
             }));
 
-            var getBufferGeometry = function () {
-                if ($("#matPoint").attr('checked') || $("#matLine").attr('checked') ||
-                    $("#matTriangle").attr('checked')) {
+            var getBufferGeometry = function (geo) {
 
-                    var bufferGeometry;
+                var bufferGeometry;
 
-                    if ($("#matPoint").attr('checked') && !( $("#matLine").attr('checked') ||
-                        $("#matTriangle").attr('checked') )) {
-                        bufferGeometry = new BufferGeometry();
-                    } else if ($("#matLine").attr('checked') && !( $("#matPoint").attr('checked') ||
-                        $("#matTriangle").attr('checked') )) {
-                        bufferGeometry = new BufferLineGeometry();
-                    } else if ($("#matTriangle").attr('checked') && !( $("#matLine").attr('checked') ||
-                        $("#matPoint").attr('checked') )) {
-                        bufferGeometry = new BufferTriangleGeometry();
-                    } else if ($("#matPoint").attr('checked') &&
-                        $("#matLine").attr('checked') && !($("#matTriangle").attr('checked') )) {
-                        // Point- und Line-Materialien wurden ausgewählt
-                        alert("Diesen Feature ist zur Zeit noch nicht verfügbar.");
-                        console.log("Point- und Line-Materialien wurden ausgewählt");
-                    } else if ($("#matPoint").attr('checked') &&
-                        $("#matTriangle").attr('checked') && !($("#matLine").attr('checked') )) {
-                        // Point- und Triangle-Materialien wurden ausgewählt
-                        alert("Diesen Feature ist zur Zeit noch nicht verfügbar.");
-                        console.log("Point- und Triangle-Materialien wurden ausgewählt");
-                    } else if ($("#matTriangle").attr('checked') &&
-                        $("#matLine").attr('checked') && !($("#matPoint").attr('checked') )) {
-                        // Triangle- und Line-Materialien wurden ausgewählt
-                        alert("Diesen Feature ist zur Zeit noch nicht verfügbar.");
-                        console.log("Triangle- und Line-Materialien wurden ausgewählt");
+                if (isPoint() || isLine() ||
+                    isTriangle() || isSolid() || isWireframe()) {
+
+
+                    if (isPoint() && !( isLine() || isTriangle() || isSolid() || isWireframe() )) {
+                        bufferGeometry = new BufferGeometry(true, false, false, false, false);
+                    } else if (isLine() && !( isPoint() || isTriangle() || isSolid() || isWireframe() )) {
+                        bufferGeometry = new BufferGeometry(false, true, false, false, false);
+                    } else if (isTriangle() && !( isLine() || isPoint() || isSolid() || isWireframe() )) {
+                        if ( geo instanceof Random_Triangle ) {
+                            bufferGeometry = new BufferGeometry(false, false, true, false, false);
+                            bufferGeometry.addAttribute("normal", geo.getNormals());
+                        } else {
+                            alert("Dieses Material ist für diese Geometrie nicht dacht!");
+                        }
+                    } else if (isSolid() && !( isLine() || isTriangle() || isPoint() || isWireframe() )) {
+                        if ((geo instanceof ParametricSurface) || (geo instanceof Band)) {
+                            bufferGeometry = new BufferGeometry(false, false, false, true, false);
+                            bufferGeometry.setIndex(geo.getIndices());
+                        } else {
+                            alert("Dieses Material ist für diese Geometrie nicht dacht!");
+                        }
+                    } else if (isWireframe() && !( isLine() || isTriangle() || isPoint() || isSolid() )) {
+                        if ((geo instanceof ParametricSurface) /*|| (geo instanceof Band)*/) {
+                            bufferGeometry = new BufferGeometry(false, false, false, false, true);
+                            bufferGeometry.setIndex(geo.getIndices());
+                        } else {
+                            alert("Dieses Material ist für diese Geometrie nicht dacht!");
+                        }
+
+                        /**
+                         * alle Materialien können einzeln ausgeführt werden
+                         *
+                         * --> alles weitere noch nicht
+                         */
+
                     } else {
-                        // alle drei Materialien wurden ausgewählt
+                        // drei Materialien wurden ausgewählt
                         alert("Diesen Feature ist zur Zeit noch nicht verfügbar.");
-                        console.log("alle drei Materialien wurden ausgewählt");
+                        console.log("mehrere Materialien wurden ausgewählt");
                     }
+
+                    bufferGeometry.addAttribute("position", geo.getPositions());
+                    bufferGeometry.addAttribute("color", geo.getColors());
 
                     return bufferGeometry;
 
                 } else {
                     //return a PointBufferGeometry
                     console.log("POINTBufferGeometry");
-                    return new BufferGeometry();
+                    bufferGeometry = new BufferGeometry(true, false, false, false, false);
+                    bufferGeometry.addAttribute("position", geo.getPositions());
+                    bufferGeometry.addAttribute("color", geo.getColors());
+                    return bufferGeometry;
                 }
-            }
+            };
 
-        };
+            var isPoint = function () {
+                return !!$("#matPoint").attr('checked');
+            };
 
-        // return the constructor function
+            var isLine = function () {
+                return !!$("#matLine").attr('checked');
+            };
+
+            var isTriangle = function () {
+                return !!$("#matTriangle").attr('checked');
+            };
+
+            var isSolid = function () {
+                return !!$("#matSolid").attr('checked');
+            };
+
+            var isWireframe = function () {
+                return !!$('#wireframe').attr('checked');
+            };
+
+            // return the constructor function
+        }
+
         return HtmlController;
 
-    }))
-; // require
+    })); // require
 
 
 

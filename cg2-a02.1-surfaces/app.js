@@ -30,8 +30,6 @@ requirejs.config({
         "util"  : "./utils/util",
         "shaders" : "./shaders",
         "BufferGeometry" : "./scene/buffer_geometry",
-        "BufferLineGeometry" : "./scene/buffer_linegeometry",
-        "BufferTriangleGeometry" : "./scene/buffer_trianglegeometry",
         "HtmlController": "./controller/html_controller"
 
     },

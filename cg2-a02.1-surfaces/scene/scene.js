@@ -12,8 +12,8 @@
 
 
 /* requireJS module definition */
-define(["three", "util", "shaders", "BufferGeometry", "BufferLineGeometry", "BufferTriangleGeometry", "random", "band", "parametricSurface", "ellipsoid_withObjFilling", "random_Triangle"],
-    (function (THREE, util, shaders, BufferGeometry, BufferLineGeometry, BufferTriangleGeometry, Random, Band, ParametricSurface, Ellipsoid_withObjFilling, Random_Triangle) {
+define(["three", "util", "shaders", "BufferGeometry", "random", "band", "parametricSurface", "ellipsoid_withObjFilling", "random_Triangle"],
+    (function (THREE, util, shaders, BufferGeometry, Random, Band, ParametricSurface, Ellipsoid_withObjFilling, Random_Triangle) {
 
         "use strict";
 
@@ -70,8 +70,8 @@ define(["three", "util", "shaders", "BufferGeometry", "BufferLineGeometry", "Buf
 
                 scope.currentMesh = bufferGeometry.getMesh();
                 scope.scene.add(scope.currentMesh);
-                this.addLights(true);
 
+                this.addLights(true);
             };
 
             this.addLights = function (lights) {

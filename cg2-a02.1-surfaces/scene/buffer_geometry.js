@@ -17,19 +17,22 @@
 
 /* requireJS module definition */
 define(["three"],
-    (function(THREE) {
+    (function (THREE) {
 
         "use strict";
 
-        var BufferGeometry = function () {
+        var BufferGeometry = function (point, line, triangle, solid, wf) {
 
-            this.mesh     = undefined;
+            this.isPoint = point || false;
+            this.isLine = line || false;
+            this.isTriangle = triangle || false;
+            this.isSolid = solid || false;
+            this.isWireframe = wf || false;
+
+            this.mesh = undefined;
             this.geometry = new THREE.BufferGeometry();
-            //für Dreiecke muss das Materail noch geändert werden und in der Scene eine Ambiente Beleuchtung einbauen
-            this.material = new THREE.PointsMaterial( {
-                color: 0xaaaaaa,
-                size: 10, vertexColors: THREE.VertexColors
-            } );
+
+            //this.material = getMaterial();
 
             /**
              * Adds a vertex attribute, we assume each element has three components, e.g.
@@ -39,20 +42,49 @@ define(["three"],
              * @param name vertex attributes name, e.g. position, color, normal
              * @param buffer
              */
-            this.addAttribute = function(name, buffer) {
-                this.geometry.addAttribute( name, new THREE.BufferAttribute( buffer, 3 ) );
+            this.addAttribute = function (name, buffer) {
+                this.geometry.addAttribute(name, new THREE.BufferAttribute(buffer, 3));
                 this.geometry.computeBoundingSphere();
-                /*console.log(this.geometry.normals);
-                //zuer Bildung von Dreiecken anstatt Punkten
-                if(this.geometry.normals != null){
-                    this.mesh = new THREE.mesh( this.geometry, this.material );
-                }else {*/
-                    this.mesh = new THREE.Points( this.geometry, this.material );
-                //}
+                if (!this.isPoint || !this.isLine )this.mesh = new THREE.Mesh(this.geometry, this.getMaterial());
+                if (this.isPoint) this.mesh = new THREE.Points(this.geometry, this.getMaterial());
+                if (this.isLine) this.mesh = new THREE.Line(this.geometry, this.getMaterial());
             }
 
-            this.getMesh = function() {
+            this.getMesh = function () {
                 return this.mesh;
+            }
+
+            this.setIndex = function (indices) {
+                this.geometry.setIndex(new THREE.BufferAttribute(indices, 1));
+            }
+
+            this.getMaterial = function () {
+                if (this.isPoint)
+                    return new THREE.PointsMaterial({
+                        color: 0xaaaaaa,
+                        size: 10, vertexColors: THREE.VertexColors
+                    });
+                if (this.isLine)
+                    return new THREE.LineBasicMaterial({vertexColors: THREE.VertexColors});
+
+                if (this.isTriangle)
+                    return new THREE.MeshPhongMaterial({
+                        color: 0xaaaaaa, specular: 0xffffff, shininess: 250,
+                        side: THREE.DoubleSide, vertexColors: THREE.VertexColors
+                    });
+
+                if (this.isSolid)
+                    return new THREE.MeshBasicMaterial({
+                        vertexColors: THREE.VertexColors
+                    });
+                if (this.isWireframe)
+                    return new THREE.MeshBasicMaterial({color: 0xff0000, wireframe: true});
+
+                return new THREE.PointsMaterial({
+                    color: 0xaaaaaa,
+                    size: 10, vertexColors: THREE.VertexColors
+                });
+
             }
         };
 
