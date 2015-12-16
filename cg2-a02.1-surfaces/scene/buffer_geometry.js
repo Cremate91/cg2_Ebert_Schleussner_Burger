@@ -32,7 +32,6 @@ define(["three"],
             this.mesh = undefined;
             this.geometry = new THREE.BufferGeometry();
 
-            //this.material = getMaterial();
 
             /**
              * Adds a vertex attribute, we assume each element has three components, e.g.
@@ -46,12 +45,6 @@ define(["three"],
                 this.geometry.addAttribute(name, new THREE.BufferAttribute(buffer, 3));
                 this.geometry.computeBoundingSphere();
                 this.mesh = this.setMesh(this.geometry);
-
-                //if (!this.isPoint || !this.isLine )this.mesh = new THREE.Mesh(this.geometry, this.getMaterial());
-                //if (!this.isPoint || !this.isLine )this.mesh =
-                //    new THREE.SceneUtils.createMultiMaterialObject(this.geometry, this.getMaterial());
-                //if (this.isPoint) this.mesh = new THREE.Points(this.geometry, this.getMaterial());
-                //if (this.isLine) this.mesh = new THREE.Line(this.geometry, this.getMaterial());
             }
 
             this.getMesh = function () {
@@ -75,19 +68,19 @@ define(["three"],
                 } else if (this.isTriangle) {
                     var mat = new THREE.MeshPhongMaterial({
                         color: 0xaaaaaa, specular: 0xffffff, shininess: 250,
-                        side: THREE.DoubleSide, vertexColors: THREE.VertexColors
+                        side: 2, vertexColors: THREE.VertexColors
                     });
                     return new THREE.Mesh(geo, mat);
                 } else if (this.isSolid && !this.isWireframe) {
-                    var mat = new THREE.MeshBasicMaterial({ vertexColors: THREE.VertexColors });
+                    var mat = new THREE.MeshLambertMaterial({color: 0x2194ce, emissive: 0x000000, side: 2});
                     return new THREE.Mesh(geo, mat);
                 } else if (this.isWireframe && !this.isSolid) {
-                    var mat = new THREE.MeshBasicMaterial({color: 0x0000ff, wireframe: true});
+                    var mat = new THREE.MeshLambertMaterial({color: 0x0000ff, wireframe: true});
                     return new THREE.Mesh(geo, mat);
                 }else if(this.isWireframe && this.isSolid){
                     var materials = [
-                        new THREE.MeshBasicMaterial({vertexColors: THREE.VertexColors}),
-                        new THREE.MeshBasicMaterial({color: 0x000000, wireframe: true})
+                        new THREE.MeshLambertMaterial({color: 0xcc0000, emissive: 0x000000, side: 2}),
+                        new THREE.MeshLambertMaterial({color: 0x000000, wireframe: true})
                     ];
                     return new THREE.SceneUtils.createMultiMaterialObject(geo, materials);
                 } else {

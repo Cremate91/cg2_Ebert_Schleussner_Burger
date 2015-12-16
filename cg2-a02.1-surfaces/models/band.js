@@ -35,7 +35,7 @@ define(["three"],
             var index = 0;
             var counter = 0;
 
-            for (var i = 0; i < (segments*2); i++) {
+            for (var i = 0; i <= (segments*2); i++) {
 
                 var t = 0;
                 // Y coordinates are simply -height/2 and +height/2
@@ -52,34 +52,39 @@ define(["three"],
                 var x = Math.sin(t) * radius;
                 var z = Math.cos(t) * radius;
 
+                //console.log(counter);
+                //console.log(this.positions.length);
+
                 this.positions[counter    ] = x;
                 this.positions[counter + 1] = y;
                 this.positions[counter + 2] = z;
 
-                if ( i < segments*2-3 ) {
+                if ( i < segments*2 - 3 ) {
 
                     // 1. Dreieck
-                    this.indices[index    ] = i;          //p0
-                    this.indices[index + 1] = i + 1;      //p1
-                    this.indices[index + 2] = i + 2;      //p4
-                    // 2. Dreiecindices
-                    this.indices[index + 3] = i + 1;      //p1
-                    this.indices[index + 4] = i + 3;      //p5
-                    this.indices[index + 5] = i + 2;      //p4
+                    this.indices[index    ] = i;
+                    this.indices[index + 1] = i + 1;
+                    this.indices[index + 2] = i + 2;
+                    // 2. Dreieck
+                    this.indices[index + 3] = i + 1;
+                    this.indices[index + 4] = i + 3;
+                    this.indices[index + 5] = i + 2;
+
+                    //console.log("index : " + (index));
+                    //console.log("i : " + (i));
+                    //console.log("index+1 : " + (index+1));
+                    //console.log("i+1 : " + (i+1));
+                    //console.log("index+2 : " + (index+2));
+                    //console.log("i+2 : " + (i+2));
+                    //
+                    //console.log("index+3 : " + (index+3));
+                    //console.log("i+1 : " + (i+1));
+                    //console.log("index+4 : " + (index+4));
+                    //console.log("i+3 : " + (i+3));
+                    //console.log("index+5 : " + (index+5));
+                    //console.log("i+2 : " + (i+2));
+
                 }
-                //console.log("index : " + (index));
-                //console.log("i : " + (i));
-                //console.log("index+1 : " + (index+1));
-                //console.log("i+1 : " + (i+1));
-                //console.log("index+2 : " + (index+2));
-                //console.log("i+2 : " + (i+2));
-                //
-                //console.log("index+3 : " + (index+3));
-                //console.log("i+1 : " + (i+1));
-                //console.log("index+4 : " + (index+4));
-                //console.log("i+3 : " + (i+3));
-                //console.log("index+5 : " + (index+5));
-                //console.log("i+2 : " + (i+2));
 
                 color.setRGB(1, 0, 0);
 
@@ -89,39 +94,30 @@ define(["three"],
                 index += 6;
                 counter += 3;
             }
+            index = index-24;
+            i = i-4;
+            // 1. Dreieck
+            this.indices[index    ] = i+1;
+            this.indices[index + 1] = i+2;
+            this.indices[index + 2] = this.indices[0];
+            // 2. Dreieck
+            this.indices[index + 3] = i + 2;
+            this.indices[index + 4] = this.indices[1];
+            this.indices[index + 5] = this.indices[0];
+
             //console.log("index : " + (index));
-            //console.log("i : " + (i));
-            //console.log("index+1 : " + (index+1));
             //console.log("i+1 : " + (i+1));
-            //console.log("index+2 : " + (index+2));
+            //console.log("index+1 : " + (index+1));
             //console.log("i+2 : " + (i+2));
+            //console.log("index+2 : " + (index+2));
+            //console.log("this.indices[0] : " + (this.indices[0]));
             //
             //console.log("index+3 : " + (index+3));
-            //console.log("i+1 : " + (i+1));
-            //console.log("index+4 : " + (index+4));
-            //console.log("i+3 : " + (i+3));
-            //console.log("index+5 : " + (index+5));
             //console.log("i+2 : " + (i+2));
-
-            // 1. Dreieck
-            //this.indices[index    ] = i;          //p0
-            //this.indices[index + 1] = i + 1;      //p1
-            //this.indices[index + 2] = 0;      //p4
-            //// 2. Dreiecindices
-            //this.indices[index + 3] = i + 1;      //p1
-            //this.indices[index + 4] = 1;      //p5
-            //this.indices[index + 5] = 0;      //p4
-
-
-            //letztes fehlende Teil manuell hinzufügen..
-            //console.log(index+5);
-            //console.log(segments*2+2);
-            //console.log(this.indices.length);
-            //console.log(this.indices.length-1);
-            //console.log(this.indices.length-2);
-            //console.log(this.indices[this.indices.length]);
-            //console.log(this.indices[this.indices.length-1]);
-            //console.log(this.indices[this.indices.length-2]);
+            //console.log("index+4 : " + (index+4));
+            //console.log("this.indices[1] : " + (this.indices[1]));
+            //console.log("index+5 : " + (index+5));
+            //console.log("this.indices[0] : " + (this.indices[0]));
 
             this.getPositions = function () {
                 return this.positions;
