@@ -11,8 +11,8 @@
 
 
 /* requireJS module definition */
-define(["jquery", "BufferGeometry", "random", "band", "parametricSurface", "ellipsoid_withObjFilling", "random_Triangle"],
-    (function ($, BufferGeometry, Random, Band, ParametricSurface, Ellipsoid_withObjFilling, Random_Triangle) {
+define(["jquery", "BufferGeometry", "random", "band", "parametricSurface", "ellipsoid_withObjFilling", "random_Triangle", "robot"],
+    (function ($, BufferGeometry, Random, Band, ParametricSurface, Ellipsoid_withObjFilling, Random_Triangle, Robot) {
         "use strict";
 
         /*
@@ -29,6 +29,8 @@ define(["jquery", "BufferGeometry", "random", "band", "parametricSurface", "elli
             $("#ellipsoid").hide();
             $("#ellipsoidWithFill").hide();
             $("#customRandom").hide();
+            $("#robot").hide();
+            $("#material").show();
 
             $("#btnRandom").click((function () {
                 $("#random").show();
@@ -39,6 +41,8 @@ define(["jquery", "BufferGeometry", "random", "band", "parametricSurface", "elli
                 $("#ellipsoidWithFill").hide();
                 $("#ellipsoid").hide();
                 $("#customRandom").hide();
+                $("#robot").hide();
+                $("#material").show();
             }));
             $("#btnBand").click((function () {
                 $("#random").hide();
@@ -49,6 +53,8 @@ define(["jquery", "BufferGeometry", "random", "band", "parametricSurface", "elli
                 $("#ellipsoidWithFill").hide();
                 $("#ellipsoid").hide();
                 $("#customRandom").hide();
+                $("#robot").hide();
+                $("#material").show();
             }));
             $("#btnParametricSurface").click((function () {
                 $("#random").hide();
@@ -59,6 +65,8 @@ define(["jquery", "BufferGeometry", "random", "band", "parametricSurface", "elli
                 $("#ellipsoidWithFill").hide();
                 $("#ellipsoid").hide();
                 $("#customRandom").hide();
+                $("#robot").hide();
+                $("#material").show();
             }));
             $("#btnEllipsoid").click((function () {
                 $("#random").hide();
@@ -69,6 +77,8 @@ define(["jquery", "BufferGeometry", "random", "band", "parametricSurface", "elli
                 $("#ellipsoidWithFill").hide();
                 $("#ellipsoid").show();
                 $("#customRandom").hide();
+                $("#robot").hide();
+                $("#material").show();
             }));
             $("#btnEllipsoidWithFill").click((function () {
                 $("#random").hide();
@@ -79,6 +89,8 @@ define(["jquery", "BufferGeometry", "random", "band", "parametricSurface", "elli
                 $("#ellipsoidWithFill").show();
                 $("#ellipsoid").hide();
                 $("#customRandom").hide();
+                $("#robot").hide();
+                $("#material").show();
             }));
             $("#btnCustomRandom").click((function () {
                 $("#random").hide();
@@ -89,6 +101,8 @@ define(["jquery", "BufferGeometry", "random", "band", "parametricSurface", "elli
                 $("#ellipsoidWithFill").hide();
                 $("#ellipsoid").hide();
                 $("#customRandom").show();
+                $("#robot").hide();
+                $("#material").show();
             }));
             $("#btnDinis").click((function () {
                 $("#random").hide();
@@ -99,6 +113,8 @@ define(["jquery", "BufferGeometry", "random", "band", "parametricSurface", "elli
                 $("#ellipsoidWithFill").hide();
                 $("#ellipsoid").hide();
                 $("#customRandom").hide();
+                $("#robot").hide();
+                $("#material").show();
             }));
             $("#btnTranguloidTrefoil").click((function () {
                 $("#random").hide();
@@ -109,6 +125,20 @@ define(["jquery", "BufferGeometry", "random", "band", "parametricSurface", "elli
                 $("#ellipsoidWithFill").hide();
                 $("#ellipsoid").hide();
                 $("#customRandom").hide();
+                $("#robot").hide();
+                $("#material").show();
+            }));
+            $("#btnRobot").click((function() {
+                $("#random").hide();
+                $("#band").hide();
+                $("#parametricSurface").hide();
+                $("#dinisSurface").hide();
+                $("#tranguloidTrefoil").hide();
+                $("#ellipsoidWithFill").hide();
+                $("#ellipsoid").hide();
+                $("#customRandom").hide();
+                $("#robot").show();
+                $("#material").hide();
             }));
 
 
@@ -295,6 +325,11 @@ define(["jquery", "BufferGeometry", "random", "band", "parametricSurface", "elli
                     //console.log("stop");
                     stopAnimate();
                 }
+            }));
+
+            $("#btnNewRobot").click((function(){
+                var robo = new Robot();
+                scene.add(robo);
             }));
 
             var ani;
