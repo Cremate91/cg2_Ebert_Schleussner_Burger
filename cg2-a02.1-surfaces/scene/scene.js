@@ -12,8 +12,8 @@
 
 
 /* requireJS module definition */
-define(["three", "util", "shaders", "BufferGeometry", "random", "band", "parametricSurface", "ellipsoid_withObjFilling", "random_Triangle"],
-    (function (THREE, util, shaders, BufferGeometry, Random, Band, ParametricSurface, Ellipsoid_withObjFilling, Random_Triangle) {
+define(["three", "util", "shaders", "BufferGeometry", "random", "band", "parametricSurface", "ellipsoid_withObjFilling", "random_Triangle", "robot"],
+    (function (THREE, util, shaders, BufferGeometry, Random, Band, ParametricSurface, Ellipsoid_withObjFilling, Random_Triangle, Robot) {
 
         "use strict";
 
@@ -51,22 +51,84 @@ define(["three", "util", "shaders", "BufferGeometry", "random", "band", "paramet
                 if (scope.currentMesh != undefined) {
                     // Get the key code of the pressed key
                     var keyCode = event.which;
+                    var roboto = scope.scene.getObjectByName("robot", true);
+                    var nodeLeftArm = scope.scene.getObjectByName("shoulderLeft", true);
+                    var nodeLeftEllbow = scope.scene.getObjectByName("armLeftEllbow", true);
+                    var nodeRightArm = scope.scene.getObjectByName("shoulderRight", true);
+                    var nodeRightEllbow = scope.scene.getObjectByName("armRightEllbow", true);
+                    var nodeLeftLeg = scope.scene.getObjectByName("thighJointLeft", true);
+                    var nodeRightLeg = scope.scene.getObjectByName("thighJointRight", true);
+                    var nodeLeftKnee = scope.scene.getObjectByName("kneeLeft", true);
+                    var nodeRightKnee = scope.scene.getObjectByName("kneeRight", true);
 
                     if (keyCode == 38) {
                         console.log("cursor up");
-                        scope.currentMesh.rotation.x += 0.05;
+                        if (roboto) {
+                            nodeLeftArm.rotation.x += 0.05;
+                            nodeLeftEllbow.rotation.x += 0.05;
+                            nodeRightArm.rotation.x -= 0.05;
+                            nodeRightEllbow.rotation.x -= 0.05;
+                            nodeLeftLeg.rotation.x -= 0.05;
+                            nodeRightLeg.rotation.x -= 0.05;
+                            nodeLeftKnee.rotation.x += 0.05;
+                            nodeRightKnee.rotation.x += 0.05;
+
+                            roboto.translateZ(10);
+
+
+                        } else {
+                            scope.currentMesh.rotation.x += 0.05;
+                        }
                         // Cursor down
                     } else if (keyCode == 40) {
-                        console.log("cursor down");
-                        scope.currentMesh.rotation.x += -0.05;
+                        if (roboto) {
+                            nodeLeftArm.rotation.x -= 0.05;
+                            nodeLeftEllbow.rotation.x -= 0.05;
+                            nodeRightArm.rotation.x += 0.05;
+                            nodeRightEllbow.rotation.x += 0.05;
+                            nodeLeftLeg.rotation.x += 0.05;
+                            nodeRightLeg.rotation.x += 0.05;
+                            nodeLeftKnee.rotation.x -= 0.05;
+                            nodeRightKnee.rotation.x -= 0.05;
+                            roboto.translateZ(-10);
+
+
+                        } else {
+                            scope.currentMesh.rotation.x += 0.05;
+                        }
                         // Cursor left
                     } else if (keyCode == 37) {
-                        console.log("cursor left");
-                        scope.currentMesh.rotation.y += 0.05;
+                        if (roboto) {
+                            nodeLeftArm.rotation.y -= 0.05;
+                            nodeLeftEllbow.rotation.y -= 0.05;
+                            nodeRightArm.rotation.y += 0.05;
+                            nodeRightEllbow.rotation.y += 0.05;
+                            nodeLeftLeg.rotation.y += 0.05;
+                            nodeRightLeg.rotation.y += 0.05;
+                            nodeLeftKnee.rotation.y -= 0.05;
+                            nodeRightKnee.rotation.y -= 0.05;
+                            roboto.translateX(10);
+
+
+                        } else {
+                            scope.currentMesh.rotation.y += 0.05;
+                        }
                         // Cursor right
                     } else if (keyCode == 39) {
-                        console.log("cursor right");
-                        scope.currentMesh.rotation.y += -0.05;
+                        if (roboto) {
+                            nodeLeftArm.rotation.y += 0.05;
+                            nodeLeftEllbow.rotation.y += 0.05;
+                            nodeRightArm.rotation.y -= 0.05;
+                            nodeRightEllbow.rotation.y -= 0.05;
+                            nodeLeftLeg.rotation.y -= 0.05;
+                            nodeRightLeg.rotation.y -= 0.05;
+                            nodeLeftKnee.rotation.y += 0.05;
+                            nodeRightKnee.rotation.y += 0.05;
+                            roboto.translateX(-10);
+
+                        } else {
+                            scope.currentMesh.rotation.y += 0.05;
+                        }
                         // Cursor up
                     }
                 } else {
@@ -84,9 +146,9 @@ define(["three", "util", "shaders", "BufferGeometry", "random", "band", "paramet
             };
 
             this.addLights = function () {
-                    scope.scene.add(ambientLight);
-                    scope.scene.add(light1);
-                    scope.scene.add(light2);
+                scope.scene.add(ambientLight);
+                scope.scene.add(light1);
+                scope.scene.add(light2);
             };
 
             this.removeLights = function () {
@@ -95,9 +157,39 @@ define(["three", "util", "shaders", "BufferGeometry", "random", "band", "paramet
                 scope.scene.remove(light2);
             };
 
+            var pos = false;
             this.letAnim = function (anim) {
                 if (scope.currentMesh != undefined) {
-                    if (anim) {
+                    var roboto = scope.scene.getObjectByName("robot", true);
+                    var nodeLeftEllbow = scope.scene.getObjectByName("armLeftEllbow", true);
+                    var nodeRightEllbow = scope.scene.getObjectByName("armRightEllbow", true);
+                    var nodeLeftLeg = scope.scene.getObjectByName("thighJointLeft", true);
+                    var torso = scope.scene.getObjectByName("torso", true);
+
+                    if (roboto) {
+                        console.log(roboto.position.x);
+
+                        if (pos) {
+                            roboto.position.x += 10;
+                            nodeLeftEllbow.rotation.x += 0.02;
+                            nodeRightEllbow.rotation.x -= 0.02;
+                            nodeLeftLeg.rotation.x += 0.01;
+                            //torso.scaleX(50);
+                            if(roboto.position.x == 500){
+                                pos = false;
+                            }
+                        } else {
+                            roboto.position.x -=10;
+                            nodeLeftEllbow.rotation.x -= 0.02;
+                            nodeRightEllbow.rotation.x += 0.02;
+                            nodeLeftLeg.rotation.x -= 0.01;
+                            if(roboto.position.x == -500){
+                                pos = true;
+                            }
+                        }
+
+
+                    } else if (anim) {
                         scope.currentMesh.rotation.x += 0.0075;
                         scope.currentMesh.rotation.y += 0.01;
                     }
@@ -106,7 +198,7 @@ define(["three", "util", "shaders", "BufferGeometry", "random", "band", "paramet
                 }
             };
 
-            this.removeBufferGeogemtry = function(){
+            this.removeBufferGeogemtry = function () {
                 if (scope.currentMesh != undefined) {
                     scope.scene.remove(scope.currentMesh);
                     this.removeLights();
@@ -125,6 +217,12 @@ define(["three", "util", "shaders", "BufferGeometry", "random", "band", "paramet
                 scope.renderer.render(scope.scene, scope.camera);
 
             };
+            this.add = function (robo) {
+
+                scope.currentMesh = robo.root;
+                scope.scene.add(scope.currentMesh);
+            };
+
         };
 
 
