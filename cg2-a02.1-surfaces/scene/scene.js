@@ -33,6 +33,15 @@ define(["three", "util", "shaders", "BufferGeometry", "random", "band", "paramet
             scope.camera.position.z = 1000;
             scope.scene = new THREE.Scene();
 
+            /**
+             *  Lights
+             */
+            var ambientLight = new THREE.AmbientLight(0xaaaaaa);
+            var light1 = new THREE.DirectionalLight(0xffffff, 0.5);
+            light1.position.set(1, 1, 1);
+            var light2 = new THREE.DirectionalLight(0xffffff, 1.5);
+            light2.position.set(0, -1, 0);
+
             // Add a listener for 'keydown' events. By this listener, all key events will be
             // passed to the function 'onDocumentKeyDown'. There's another event type 'keypress'.
             document.addEventListener("keydown", onDocumentKeyDown, false);
@@ -71,35 +80,19 @@ define(["three", "util", "shaders", "BufferGeometry", "random", "band", "paramet
                 scope.currentMesh = bufferGeometry.getMesh();
                 scope.scene.add(scope.currentMesh);
 
-                this.addLights(true);
+                this.addLights();
             };
 
-            this.addLights = function (lights) {
-                if (lights) {
-                    scope.scene.add(new THREE.AmbientLight(0xaaaaaa));
-
-                    var light1 = new THREE.DirectionalLight(0xffffff, 0.5);
-                    light1.position.set(1, 1, 1);
+            this.addLights = function () {
+                    scope.scene.add(ambientLight);
                     scope.scene.add(light1);
-
-                    var light2 = new THREE.DirectionalLight(0xffffff, 1.5);
-                    light2.position.set(0, -1, 0);
                     scope.scene.add(light2);
-                }else{
-                    //scope.scene.add(new THREE.AmbientLight(0xcccccc));
-                }
             };
 
             this.removeLights = function () {
-                scope.scene.add(new THREE.AmbientLight(0x444444));
-
-                var light1 = new THREE.DirectionalLight(0x000000, 0.5);
-                light1.position.set(1, 1, 1);
-                scope.scene.add(light1);
-
-                var light2 = new THREE.DirectionalLight(0x000000, 1.5);
-                light2.position.set(0, -1, 0);
-                scope.scene.add(light2);
+                scope.scene.remove(ambientLight);
+                scope.scene.remove(light1);
+                scope.scene.remove(light2);
             };
 
             this.letAnim = function (anim) {
@@ -116,8 +109,7 @@ define(["three", "util", "shaders", "BufferGeometry", "random", "band", "paramet
             this.removeBufferGeogemtry = function(){
                 if (scope.currentMesh != undefined) {
                     scope.scene.remove(scope.currentMesh);
-                    this.removeLights(); // das funktionier noch nicht richtig, man merkt es beim wiederholten
-                    // erstellen einer Geometrie mit einem Dreickmaterial
+                    this.removeLights();
                 } else {
                     console.log("I don´t have an obj!");
                 }

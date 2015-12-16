@@ -325,9 +325,11 @@ define(["jquery", "BufferGeometry", "random", "band", "parametricSurface", "elli
                     } else if (isLine() && !( isPoint() || isTriangle() || isSolid() || isWireframe() )) {
                         bufferGeometry = new BufferGeometry(false, true, false, false, false);
                     } else if (isTriangle() && !( isLine() || isPoint() || isSolid() || isWireframe() )) {
-                        if ( geo instanceof Random_Triangle ) {
+                        if ( (geo instanceof Random_Triangle)
+                            || (geo instanceof Ellipsoid_withObjFilling)
+                            || (geo instanceof Random)) {
                             bufferGeometry = new BufferGeometry(false, false, true, false, false);
-                            bufferGeometry.addAttribute("normal", geo.getNormals());
+                            //bufferGeometry.addAttribute("normal", geo.getNormals()); // für Random_Triangle
                         } else {
                             alert("Dieses Material ist für diese Geometrie nicht dacht!");
                         }
@@ -339,12 +341,20 @@ define(["jquery", "BufferGeometry", "random", "band", "parametricSurface", "elli
                             alert("Dieses Material ist für diese Geometrie nicht dacht!");
                         }
                     } else if (isWireframe() && !( isLine() || isTriangle() || isPoint() || isSolid() )) {
-                        if ((geo instanceof ParametricSurface) /*|| (geo instanceof Band)*/) {
+                        if ( (geo instanceof ParametricSurface) || (geo instanceof Band) ) {
                             bufferGeometry = new BufferGeometry(false, false, false, false, true);
                             bufferGeometry.setIndex(geo.getIndices());
                         } else {
                             alert("Dieses Material ist für diese Geometrie nicht dacht!");
                         }
+                    } else if (isWireframe() && isSolid() && !( isLine() || isTriangle() || isPoint() )){
+                        if ( (geo instanceof ParametricSurface) || (geo instanceof Band) ) {
+                            bufferGeometry = new BufferGeometry(false, false, false, true, true);
+                            bufferGeometry.setIndex(geo.getIndices());
+                        } else {
+                            alert("Dieses Material ist für diese Geometrie nicht dacht!");
+                        }
+
 
                         /**
                          * alle Materialien können einzeln ausgeführt werden

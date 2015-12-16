@@ -45,9 +45,13 @@ define(["three"],
             this.addAttribute = function (name, buffer) {
                 this.geometry.addAttribute(name, new THREE.BufferAttribute(buffer, 3));
                 this.geometry.computeBoundingSphere();
-                if (!this.isPoint || !this.isLine )this.mesh = new THREE.Mesh(this.geometry, this.getMaterial());
-                if (this.isPoint) this.mesh = new THREE.Points(this.geometry, this.getMaterial());
-                if (this.isLine) this.mesh = new THREE.Line(this.geometry, this.getMaterial());
+                this.mesh = this.setMesh(this.geometry);
+
+                //if (!this.isPoint || !this.isLine )this.mesh = new THREE.Mesh(this.geometry, this.getMaterial());
+                //if (!this.isPoint || !this.isLine )this.mesh =
+                //    new THREE.SceneUtils.createMultiMaterialObject(this.geometry, this.getMaterial());
+                //if (this.isPoint) this.mesh = new THREE.Points(this.geometry, this.getMaterial());
+                //if (this.isLine) this.mesh = new THREE.Line(this.geometry, this.getMaterial());
             }
 
             this.getMesh = function () {
@@ -58,33 +62,40 @@ define(["three"],
                 this.geometry.setIndex(new THREE.BufferAttribute(indices, 1));
             }
 
-            this.getMaterial = function () {
-                if (this.isPoint)
+            this.setMesh = function (geo) {
+                if (this.isPoint) {
+                    var mat = new THREE.PointsMaterial({
+                        color: 0xaaaaaa,
+                        size: 10, vertexColors: THREE.VertexColors
+                    });
+                    return new THREE.Points(geo, mat);
+                } else if (this.isLine) {
+                    var mat = new THREE.LineBasicMaterial({vertexColors: THREE.VertexColors});
+                    return new THREE.Line(geo, mat);
+                } else if (this.isTriangle) {
+                    var mat = new THREE.MeshPhongMaterial({
+                        color: 0xaaaaaa, specular: 0xffffff, shininess: 250,
+                        side: THREE.DoubleSide, vertexColors: THREE.VertexColors
+                    });
+                    return new THREE.Mesh(geo, mat);
+                } else if (this.isSolid && !this.isWireframe) {
+                    var mat = new THREE.MeshBasicMaterial({ vertexColors: THREE.VertexColors });
+                    return new THREE.Mesh(geo, mat);
+                } else if (this.isWireframe && !this.isSolid) {
+                    var mat = new THREE.MeshBasicMaterial({color: 0x0000ff, wireframe: true});
+                    return new THREE.Mesh(geo, mat);
+                }else if(this.isWireframe && this.isSolid){
+                    var materials = [
+                        new THREE.MeshBasicMaterial({vertexColors: THREE.VertexColors}),
+                        new THREE.MeshBasicMaterial({color: 0x000000, wireframe: true})
+                    ];
+                    return new THREE.SceneUtils.createMultiMaterialObject(geo, materials);
+                } else {
                     return new THREE.PointsMaterial({
                         color: 0xaaaaaa,
                         size: 10, vertexColors: THREE.VertexColors
                     });
-                if (this.isLine)
-                    return new THREE.LineBasicMaterial({vertexColors: THREE.VertexColors});
-
-                if (this.isTriangle)
-                    return new THREE.MeshPhongMaterial({
-                        color: 0xaaaaaa, specular: 0xffffff, shininess: 250,
-                        side: THREE.DoubleSide, vertexColors: THREE.VertexColors
-                    });
-
-                if (this.isSolid)
-                    return new THREE.MeshBasicMaterial({
-                        vertexColors: THREE.VertexColors
-                    });
-                if (this.isWireframe)
-                    return new THREE.MeshBasicMaterial({color: 0xff0000, wireframe: true});
-
-                return new THREE.PointsMaterial({
-                    color: 0xaaaaaa,
-                    size: 10, vertexColors: THREE.VertexColors
-                });
-
+                }
             }
         };
 
