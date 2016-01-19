@@ -39,6 +39,8 @@
         <button id="btnEllipsoidWithFill" type="button">Ellipsoid with Filling</button>
         <button id="btnCustomRandom" type="button">CustomRandom</button>
         <button id="btnRobot" type="button">Robot</button>
+        <button id="btnPlanet" type="button">Planet</button>
+        <button id="btnExplosion" type="button">Explosion</button>
         <br>
         <br>
         <h3>Animation: <input id="anim" type="checkbox"></h3>
@@ -68,6 +70,36 @@
             <tr>
                 <td>
                     <button id="btnNewRandom" type="button">Create Random</button>
+                </td>
+            </tr>
+        </table>
+        <table id="planet">
+            <tr>
+                <td>
+                    <h3>Day Texture: <input id="dayTex" type="checkbox"></h3>
+                    <h3>Night Texture: <input id="nightTex" type="checkbox"></h3>
+                    <h3>Clouds: <input id="cloudsTex" type="checkbox"></h3>
+                    <button id="btnNewPlanet" type="button">Create Planet</button>
+                </td>
+            </tr>
+        </table>
+        <table id="explosion">
+
+            <tr>
+                <td>Frequency Scale:</td>
+                <td><input id="freqScale" class="objParam" type="number" min="0" max="10000" value="0.5">
+            </tr>
+            <tr>
+                <td>Color Scale:</td>
+                <td><input id="colorScale" class="objParam" type="number" min="0" max="10000" value="1.3">
+            </tr>
+            <tr>
+                <td>Weight:</td>
+                <td><input id="weight" class="objParam" type="number" min="0" max="10000" value="200">
+            </tr>
+            <tr>
+                <td>
+                    <button id="btnNewExplosion" type="button">Create Explosion</button>
                 </td>
             </tr>
         </table>
