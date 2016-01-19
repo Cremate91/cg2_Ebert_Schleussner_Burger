@@ -1,0 +1,326 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+
+    <!--
+     *
+     * JavaScript / WebGL teaching framwork
+     * (C)opyright Kristian Hildebrand, khildebrand@beuth-hochschule.de
+    -->
+
+    <title>CG2 A2: WebGL / Surfaces</title>
+
+    <!-- import main module using RequireJS -->
+    <script data-main="app.js" src="../lib/require.js"></script>
+
+    <!-- import style sheet -->
+    <link rel="stylesheet" type="text/css" media="screen" href="style/style.css">
+
+</head>
+
+<body>
+
+<!-- this element will be used to diplay errors -->
+<pre id="error"></pre>
+
+<!-- centered region with drawing canvas and parameter area -->
+<div align="center">
+
+    <div id="drawing_container" width="600" height="400"></div>
+
+    <div id="param_area">
+
+        <button id="btnRandom" type="button">Random</button>
+        <button id="btnBand" type="button">Band</button>
+        <button id="btnParametricSurface" type="button">ParametricSurface</button>
+        <button id="btnDinis" type="button">Dini´s Surface</button>
+        <button id="btnTranguloidTrefoil" type="button">Tranguloid Trefoil</button>
+        <button id="btnEllipsoid" type="button">Ellipsoid</button>
+        <button id="btnEllipsoidWithFill" type="button">Ellipsoid with Filling</button>
+        <button id="btnCustomRandom" type="button">CustomRandom</button>
+        <button id="btnRobot" type="button">Robot</button>
+        <button id="btnExplosion" type="button">Explosion</button>
+        <button id="btnPlanet" type="button">Planet</button>
+        <br>
+        <br>
+        <h3>Animation: <input id="anim" type="checkbox"></h3>
+        <br>
+        <button id="btnRemoveObj" type="button">Remove this Obj</button>
+        <br>
+        <br>
+        <table id="material">
+            <tr>
+                <td><h3>Material</h3></td>
+                <td>Punkte :<input id="matPoint" type="checkbox" style="width: 20px; margin-left: 24px"><br>
+                    Linien :<input id="matLine" type="checkbox" style="width: 20px; margin-left: 32px"><br>
+                    Dreiecke:<input id="matTriangle" type="checkbox" style="width: 20px; margin-left: 17px"><br>
+                    Solid :<input id="matSolid" type="checkbox" style="width: 20px; margin-left: 39px"><br>
+                    Wireframe:<input id="wireframe" type="checkbox" style="width: 20px">
+                </td>
+            </tr>
+        </table>
+        <br>
+        <!-- add more here... -->
+        <h3>Selected Object:</h3>
+        <table id="random">
+            <tr>
+                <td>Number of Items:</td>
+                <td><input id="numItems" class="objParam" type="number" min="1" max="10000" value="1000">
+            </tr>
+            <tr>
+                <td>
+                    <button id="btnNewRandom" type="button">Create Random</button>
+                </td>
+            </tr>
+        </table>
+        <table id="explosion">
+            <tr>
+                <td>Frequency Scale:</td>
+                <td><input id="freqScale" class="objParam" type="number" min="0.1" max="2" value="0.5">
+            </tr>
+            <tr>
+                <td>Color Scale:</td>
+                <td><input id="colorScale" class="objParam" type="number" min="0.1" max="5" value="1.3">
+            </tr>
+            <tr>
+                <td>Weight:</td>
+                <td><input id="weight" class="objParam" type="number" min="1" max="1000" value="200">
+            </tr>
+            <tr>
+                <td>
+                    <button id="btnNewExplosion" type="button">Create Explosion</button>
+                </td>
+            </tr>
+        </table>
+        <table id="planet">
+            <tr>
+                <td>
+                    <h3>Day Texture :<input id="texDay" type="checkbox" style="width: 20px; margin-left: 11px"></h3>
+                    <h3>Night Texture:<input id="texNight" type="checkbox" style="width: 20px"></h3>
+                    <h3>Clouds :<input id="cloud" type="checkbox" style="width: 20px; margin-left: 44px"></h3>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <button id="btnNewPlanet" type="button">Create Planet</button>
+                </td>
+            </tr>
+        </table>
+        <table id="robot">
+            <tr>
+                <td>
+                    <button id="btnNewRobot" type="button">Create Robot</button>
+                </td>
+            </tr>
+        </table>
+        <table id="band">
+            <tr>
+                <td>Number of Segments:</td>
+                <td><input id="numSegments" class="objParam" type="number" min="1" max="10000" value="1000">
+            </tr>
+            <tr>
+                <td>Radius:</td>
+                <td><input id="radius" class="objParam" type="number" min="1" max="1000" value="300">
+            </tr>
+            <tr>
+                <td>Height:</td>
+                <td><input id="height" class="objParam" type="number" min="1" max="1000" value="100">
+            </tr>
+            <tr>
+                <td>
+                    <button id="btnNewBand" type="button">Create Band</button>
+                </td>
+            </tr>
+        </table>
+        <table id="parametricSurface">
+            <tr>
+                <td>a:</td>
+                <td><input id="aPara" class="objParam" type="number" min="1" max="1000" value="1">
+            </tr>
+            <tr>
+                <td>b:</td>
+                <td><input id="bPara" class="objParam" type="number" min="1" max="1000" value="1">
+            </tr>
+            <tr>
+                <td>c:</td>
+                <td><input id="cPara" class="objParam" type="number" min="1" max="1000" value="1">
+            </tr>
+            <tr>
+                <td>u Segmente:</td>
+                <td><input id="uSegPara" class="objParam" type="number" min="1" max="1000" value="500">
+            </tr>
+            <tr>
+                <td>v Segmente:</td>
+                <td><input id="vSegPara" class="objParam" type="number" min="1" max="1000" value="500">
+            </tr>
+            <tr>
+                <td>uMIN:</td>
+                <td><input id="uMinPara" class="objParam" type="number" min="1" max="1000" value="-14.5">
+            </tr>
+            <tr>
+                <td>uMAX:</td>
+                <td><input id="uMaxPara" class="objParam" type="number" min="1" max="1000" value="14.5">
+            </tr>
+            <tr>
+                <td>vMIN:</td>
+                <td><input id="vMinPara" class="objParam" type="number" min="1" max="1000" value="-6.28">
+            </tr>
+            <tr>
+                <td>vMAX:</td>
+                <td><input id="vMaxPara" class="objParam" type="number" min="1" max="1000" value="6.28">
+            </tr>
+            <tr>
+                <td>Skalierung:</td>
+                <td><input id="paramScale" class="objParam" type="number" min="1" max="1000" value="50">
+            </tr>
+            <tr>
+                <td>Formeln XYZ: (Hinweis: Math. nicht vergessen!)</td>
+                <td>
+                    x :<br><input id="xPara" type="text" value="u * Math.cos(Math.cos(u)) * Math.cos(v)"><br>
+                    y :<br><input id="yPara" type="text" value="u * Math.cos(Math.cos(u)) * Math.sin(v)"><br>
+                    z :<br><input id="zPara" type="text" value="u * Math.sin(Math.cos(u))">
+            </tr>
+            <tr>
+                <td>
+                    <button id="btnNewParametricSurface" type="button">Create Parametricsurface</button>
+                </td>
+            </tr>
+        </table>
+        <table id="dinisSurface">
+            <tr>
+                <td>a:</td>
+                <td><input id="aDinis" class="objParam" type="number" min="1" max="1000" value="0.1">
+            </tr>
+            <tr>
+                <td>b:</td>
+                <td><input id="bDinis" class="objParam" type="number" min="1" max="1000" value="0.1">
+            </tr>
+            <tr>
+                <td>u Segmente:</td>
+                <td><input id="uSegDinis" class="objParam" type="number" min="1" max="1000" value="100">
+            </tr>
+            <tr>
+                <td>v Segmente:</td>
+                <td><input id="vSegDinis" class="objParam" type="number" min="1" max="1000" value="100">
+            </tr>
+            <tr>
+                <td>uMIN <br>[0, 12.56]:</td>
+                <td><input id="uMinDinis" class="objParam" type="number" min="1" max="1000" value="0">
+            </tr>
+            <tr>
+                <td>uMAX <br>[0, 12.56]:</td>
+                <td><input id="uMaxDinis" class="objParam" type="number" min="1" max="1000" value="12.56">
+            </tr>
+            <tr>
+                <td>vMIN <br>[0.01, 2]:</td>
+                <td><input id="vMinDinis" class="objParam" type="number" min="1" max="1000" value="0.01">
+            </tr>
+            <tr>
+                <td>vMAX <br>[0.01, 2]:</td>
+                <td><input id="vMaxDinis" class="objParam" type="number" min="1" max="1000" value="2">
+            </tr>
+            <tr>
+                <td>Skalierung:</td>
+                <td><input id="dinisScale" class="objParam" type="number" min="1" max="1000" value="400">
+            </tr>
+            <tr>
+                <td>
+                    <button id="btnNewDinis" type="button">Create Dini's_Surface</button>
+                </td>
+            </tr>
+        </table>
+        <table id="tranguloidTrefoil">
+            <tr>
+                <td>u Segmente:</td>
+                <td><input id="uSegTranguloidTrefoil" class="objParam" type="number" min="1" max="1000" value="100">
+            </tr>
+            <tr>
+                <td>v Segmente:</td>
+                <td><input id="vSegTranguloidTrefoil" class="objParam" type="number" min="1" max="1000" value="100">
+            </tr>
+            <tr>
+                <td>uMIN <br>[-3.14, 3.14]:</td>
+                <td><input id="uMinTranguloidTrefoil" class="objParam" type="number" min="1" max="1000" value="-3.14">
+            </tr>
+            <tr>
+                <td>uMAX <br>[-3.14, 3.14]:</td>
+                <td><input id="uMaxTranguloidTrefoil" class="objParam" type="number" min="1" max="1000" value="3.14">
+            </tr>
+            <tr>
+                <td>vMIN <br>[-3.14, 3.14]:</td>
+                <td><input id="vMinTranguloidTrefoil" class="objParam" type="number" min="1" max="1000" value="-3.14">
+            </tr>
+            <tr>
+                <td>vMAX <br>[-3.14, 3.14]:</td>
+                <td><input id="vMaxTranguloidTrefoil" class="objParam" type="number" min="1" max="1000" value="3.14">
+            </tr>
+            <tr>
+                <td>Skalierung:</td>
+                <td><input id="tranguloidTrefoilScale" class="objParam" type="number" min="1" max="1000" value="100">
+            </tr>
+            <tr>
+                <td>
+                    <button id="btnNewTranguloidTrefoil" type="button">Create Tranguloid_Trefoil</button>
+                </td>
+            </tr>
+        </table>
+        <table id="ellipsoid">
+            <tr>
+                <td>u Segmente:</td>
+                <td><input id="uSegEllipsoid" class="objParam" type="number" min="1" max="1000" value="100">
+            </tr>
+            <tr>
+                <td>v Segmente:</td>
+                <td><input id="vSegEllipsoid" class="objParam" type="number" min="1" max="1000" value="100">
+            </tr>
+            <tr>
+                <td>Skalierung:</td>
+                <td><input id="ellipsoidScale" class="objParam" type="number" min="1" max="1000" value="400">
+            </tr>
+            <tr>
+                <td>
+                    <button id="btnNewEllipsoid" type="button">Create Ellipsoid</button>
+                </td>
+            </tr>
+        </table>
+        <table id="ellipsoidWithFill">
+            <tr>
+                <td>u Segmente:</td>
+                <td><input id="uSegEllipsoidWithFill" class="objParam" type="number" min="1" max="1000" value="100">
+            </tr>
+            <tr>
+                <td>v Segmente:</td>
+                <td><input id="vSegEllipsoidWithFill" class="objParam" type="number" min="1" max="1000" value="100">
+            </tr>
+            <tr>
+                <td>Skalierung:</td>
+                <td><input id="ellipsoidWithFillScale" class="objParam" type="number" min="1" max="1000" value="400">
+            </tr>
+            <tr>
+                <td>
+                    <button id="btnNewEllipsoidWithFill" type="button">Create Ellipsoid with Filling</button>
+                </td>
+            </tr>
+        </table>
+        <table id="customRandom">
+            <tr>
+                <td>Number of Items:</td>
+                <td><input id="numItemsCustomRandom" class="objParam" type="number" min="1" max="10000" value="1000">
+            </tr>
+            <tr>
+                <td>Objektgröße:</td>
+                <td><input id="customRandomSize" class="objParam" type="number" min="1" max="1000" value="100">
+            </tr>
+            <tr>
+                <td>
+                    <button id="btnNewCustomRandom" type="button">Create CustomRandom</button>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+
+</div>
+
+</body>
+</html>

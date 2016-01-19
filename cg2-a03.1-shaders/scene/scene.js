@@ -12,8 +12,10 @@
 
 
 /* requireJS module definition */
-define(["three", "util", "shaders", "BufferGeometry", "random", "band", "parametricSurface", "ellipsoid_withObjFilling", "random_Triangle", "robot", "planet", "explosion"],
-    (function (THREE, util, shaders, BufferGeometry, Random, Band, ParametricSurface, Ellipsoid_withObjFilling, Random_Triangle, Robot, Planet, Explosion) {
+define(["three", "util", "shaders", "BufferGeometry", "random", "band", "parametricSurface", "ellipsoid_withObjFilling",
+    "random_Triangle", "robot", "explosion", "planet"],
+    (function (THREE, util, shaders, BufferGeometry, Random, Band, ParametricSurface, Ellipsoid_withObjFilling,
+               Random_Triangle, Robot, Explosion, Planet) {
 
         "use strict";
 
@@ -39,8 +41,8 @@ define(["three", "util", "shaders", "BufferGeometry", "random", "band", "paramet
             var aLight = new THREE.AmbientLight(0x404040);
             var dlight = new THREE.DirectionalLight(0xffffff, 0.5);
             dlight.name = "dLight";
-            //dlight.position.set( -1, 0, -0.3).normalize();
             dlight.position.set( -1, -1, -0.3).normalize();
+            //dlight.position.set( 1, 1, 1);
 
             this.addLights = function () {
                 scope.scene.add(aLight);
@@ -51,6 +53,7 @@ define(["three", "util", "shaders", "BufferGeometry", "random", "band", "paramet
                 scope.scene.remove(aLight);
                 scope.scene.remove(dlight);
             };
+
             // Add a listener for 'keydown' events. By this listener, all key events will be
             // passed to the function 'onDocumentKeyDown'. There's another event type 'keypress'.
             document.addEventListener("keydown", onDocumentKeyDown, false);
@@ -144,27 +147,14 @@ define(["three", "util", "shaders", "BufferGeometry", "random", "band", "paramet
                     console.log("I don´t have an obj!");
                 }
 
-            }
+            };
+
             this.addBufferGeometry = function (bufferGeometry) {
 
                 scope.currentMesh = bufferGeometry.getMesh();
                 scope.scene.add(scope.currentMesh);
 
                 this.addLights();
-            };
-
-            this.addMesh = function(mesh){
-                scope.currentMesh = mesh.getMesh();
-                scope.scene.add(scope.currentMesh);
-
-                //var aLight = new THREE.AmbientLight( 0x404040 );
-                //scope.scene.add(aLight);
-                //var dLight = new THREE.DirectionalLight(0xffffff, 0.5);
-                //dLight.name = "dLight";
-                //dLight.position.set(-1, -1, 0.3).normalize();
-                //scope.scene.add(dLight);
-                this.addLights();
-
             };
 
 
@@ -229,11 +219,7 @@ define(["three", "util", "shaders", "BufferGeometry", "random", "band", "paramet
                 scope.renderer.render(scope.scene, scope.camera);
 
             };
-            this.add = function (robo) {
 
-                scope.currentMesh = robo.root;
-                scope.scene.add(scope.currentMesh);
-            };
 
         };
 
