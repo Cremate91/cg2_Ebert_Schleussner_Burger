@@ -26,6 +26,8 @@ requirejs.config({
         "random_Triangle" : "./models/random_Triangle",
         "band" : "./models/band",
         "robot" : "./models/robot",
+        "planet" : "./models/planet",
+        "explosion" : "./models/explosion",
         "parametricSurface" : "./models/parametricSurface",
         "ellipsoid_withObjFilling" : "./models/ellipsoid_withObjFilling",
         "util"  : "./utils/util",

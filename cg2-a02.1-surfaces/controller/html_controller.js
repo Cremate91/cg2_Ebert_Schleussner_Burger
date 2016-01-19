@@ -11,8 +11,8 @@
 
 
 /* requireJS module definition */
-define(["jquery", "BufferGeometry", "random", "band", "parametricSurface", "ellipsoid_withObjFilling", "random_Triangle", "robot"],
-    (function ($, BufferGeometry, Random, Band, ParametricSurface, Ellipsoid_withObjFilling, Random_Triangle, Robot) {
+define(["jquery", "BufferGeometry", "random", "band", "parametricSurface", "ellipsoid_withObjFilling", "random_Triangle", "robot", "planet", "explosion"],
+    (function ($, BufferGeometry, Random, Band, ParametricSurface, Ellipsoid_withObjFilling, Random_Triangle, Robot, Planet, Explosion) {
         "use strict";
 
         /*
@@ -30,7 +30,10 @@ define(["jquery", "BufferGeometry", "random", "band", "parametricSurface", "elli
             $("#ellipsoidWithFill").hide();
             $("#customRandom").hide();
             $("#robot").hide();
+            $("#explosion").hide();
+            $("#planet").hide();
             $("#material").show();
+
 
             $("#btnRandom").click((function () {
                 $("#random").show();
@@ -42,6 +45,8 @@ define(["jquery", "BufferGeometry", "random", "band", "parametricSurface", "elli
                 $("#ellipsoid").hide();
                 $("#customRandom").hide();
                 $("#robot").hide();
+                $("#explosion").hide();
+                $("#planet").hide();
                 $("#material").show();
             }));
             $("#btnBand").click((function () {
@@ -54,6 +59,8 @@ define(["jquery", "BufferGeometry", "random", "band", "parametricSurface", "elli
                 $("#ellipsoid").hide();
                 $("#customRandom").hide();
                 $("#robot").hide();
+                $("#explosion").hide();
+                $("#planet").hide();
                 $("#material").show();
             }));
             $("#btnParametricSurface").click((function () {
@@ -66,6 +73,8 @@ define(["jquery", "BufferGeometry", "random", "band", "parametricSurface", "elli
                 $("#ellipsoid").hide();
                 $("#customRandom").hide();
                 $("#robot").hide();
+                $("#explosion").hide();
+                $("#planet").hide();
                 $("#material").show();
             }));
             $("#btnEllipsoid").click((function () {
@@ -78,6 +87,8 @@ define(["jquery", "BufferGeometry", "random", "band", "parametricSurface", "elli
                 $("#ellipsoid").show();
                 $("#customRandom").hide();
                 $("#robot").hide();
+                $("#explosion").hide();
+                $("#planet").hide();
                 $("#material").show();
             }));
             $("#btnEllipsoidWithFill").click((function () {
@@ -90,6 +101,8 @@ define(["jquery", "BufferGeometry", "random", "band", "parametricSurface", "elli
                 $("#ellipsoid").hide();
                 $("#customRandom").hide();
                 $("#robot").hide();
+                $("#explosion").hide();
+                $("#planet").hide();
                 $("#material").show();
             }));
             $("#btnCustomRandom").click((function () {
@@ -102,6 +115,8 @@ define(["jquery", "BufferGeometry", "random", "band", "parametricSurface", "elli
                 $("#ellipsoid").hide();
                 $("#customRandom").show();
                 $("#robot").hide();
+                $("#explosion").hide();
+                $("#planet").hide();
                 $("#material").show();
             }));
             $("#btnDinis").click((function () {
@@ -114,6 +129,8 @@ define(["jquery", "BufferGeometry", "random", "band", "parametricSurface", "elli
                 $("#ellipsoid").hide();
                 $("#customRandom").hide();
                 $("#robot").hide();
+                $("#explosion").hide();
+                $("#planet").hide();
                 $("#material").show();
             }));
             $("#btnTranguloidTrefoil").click((function () {
@@ -126,6 +143,8 @@ define(["jquery", "BufferGeometry", "random", "band", "parametricSurface", "elli
                 $("#ellipsoid").hide();
                 $("#customRandom").hide();
                 $("#robot").hide();
+                $("#explosion").hide();
+                $("#planet").hide();
                 $("#material").show();
             }));
             $("#btnRobot").click((function() {
@@ -138,8 +157,39 @@ define(["jquery", "BufferGeometry", "random", "band", "parametricSurface", "elli
                 $("#ellipsoid").hide();
                 $("#customRandom").hide();
                 $("#robot").show();
+                $("#explosion").hide();
+                $("#planet").hide();
                 $("#material").hide();
             }));
+            $("#btnPlanet").click((function() {
+                $("#random").hide();
+                $("#band").hide();
+                $("#parametricSurface").hide();
+                $("#dinisSurface").hide();
+                $("#tranguloidTrefoil").hide();
+                $("#ellipsoidWithFill").hide();
+                $("#ellipsoid").hide();
+                $("#customRandom").hide();
+                $("#robot").hide();
+                $("#explosion").hide();
+                $("#planet").show();
+                $("#material").hide();
+            }));
+            $("#btnExplosion").click((function() {
+                $("#random").hide();
+                $("#band").hide();
+                $("#parametricSurface").hide();
+                $("#dinisSurface").hide();
+                $("#tranguloidTrefoil").hide();
+                $("#ellipsoidWithFill").hide();
+                $("#ellipsoid").hide();
+                $("#customRandom").hide();
+                $("#robot").hide();
+                $("#explosion").show();
+                $("#planet").hide();
+                $("#material").hide();
+            }));
+
 
 
             $("#btnNewRandom").click((function () {
@@ -327,9 +377,15 @@ define(["jquery", "BufferGeometry", "random", "band", "parametricSurface", "elli
                 }
             }));
 
+
             $("#btnNewRobot").click((function(){
                 var robo = new Robot();
                 scene.add(robo);
+            }));
+            $("#btnNewPlanet").click((function(){
+                var plan = new Planet();
+                scene.addMesh(plan);
+
             }));
 
             var ani;
@@ -439,7 +495,7 @@ define(["jquery", "BufferGeometry", "random", "band", "parametricSurface", "elli
             };
 
             // return the constructor function
-        }
+        };
 
         return HtmlController;
 
