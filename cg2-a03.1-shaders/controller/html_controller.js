@@ -12,7 +12,7 @@
 
 /* requireJS module definition */
 define(["jquery", "BufferGeometry", "random", "band", "parametricSurface", "ellipsoid_withObjFilling",
-    "random_Triangle", "robot", "explosion", "planet"],
+        "random_Triangle", "robot", "explosion", "planet"],
     (function ($, BufferGeometry, Random, Band, ParametricSurface, Ellipsoid_withObjFilling,
                Random_Triangle, Robot, Explosion, Planet) {
         "use strict";
@@ -148,7 +148,7 @@ define(["jquery", "BufferGeometry", "random", "band", "parametricSurface", "elli
                 $("#explosion").hide();
                 $("#planet").hide();
             }));
-            $("#btnRobot").click((function() {
+            $("#btnRobot").click((function () {
                 $("#random").hide();
                 $("#band").hide();
                 $("#parametricSurface").hide();
@@ -162,7 +162,7 @@ define(["jquery", "BufferGeometry", "random", "band", "parametricSurface", "elli
                 $("#explosion").hide();
                 $("#planet").hide();
             }));
-            $("#btnExplosion").click((function() {
+            $("#btnExplosion").click((function () {
                 $("#random").hide();
                 $("#band").hide();
                 $("#parametricSurface").hide();
@@ -176,7 +176,7 @@ define(["jquery", "BufferGeometry", "random", "band", "parametricSurface", "elli
                 $("#explosion").show();
                 $("#planet").hide();
             }));
-            $("#btnPlanet").click((function() {
+            $("#btnPlanet").click((function () {
                 $("#random").hide();
                 $("#band").hide();
                 $("#parametricSurface").hide();
@@ -207,16 +207,8 @@ define(["jquery", "BufferGeometry", "random", "band", "parametricSurface", "elli
 
             $("#btnNewPlanet").click((function () {
 
-                //var dayTexture = isDayTex();
-                //var nightTexture = isNightTex();
-                //var clouds = isClouds();
-                //console.log("isDayTexture   : " + dayTexture);
-                //console.log("isNightTexture : " + nightTexture);
-                //console.log("isClouds       : " + clouds);
-
                 var planet = new Planet();
                 scene.addBufferGeometry(planet);
-
 
             }));
             $("#btnNewRandom").click((function () {
@@ -394,10 +386,37 @@ define(["jquery", "BufferGeometry", "random", "band", "parametricSurface", "elli
 
                 scene.addBufferGeometry(bufferGeometryCustomRandom);
             }));
-            $("#btnNewRobot").click((function(){
+            $("#btnNewRobot").click((function () {
                 var robo = new Robot();
                 scene.addBufferGeometry(robo);
             }));
+
+
+            $('#texDay').click((function () {
+                textureUpdate();
+            }));
+            $('#texNight').click((function () {
+                textureUpdate();
+            }));
+            $('#cloud').click((function () {
+                textureUpdate();
+            }));
+
+            var textureUpdate = function () {
+                scene.textureUpdate(isDayTex(), isNightTex(), isClouds());
+            };
+
+            var isDayTex = function () {
+                return !!$('#texDay').attr('checked');
+            };
+
+            var isNightTex = function () {
+                return !!$('#texNight').attr('checked');
+            };
+
+            var isClouds = function () {
+                return !!$('#cloud').attr('checked');
+            };
 
             $("#anim").click((function () {
                 if ($("#anim").attr('checked')) {
@@ -437,7 +456,7 @@ define(["jquery", "BufferGeometry", "random", "band", "parametricSurface", "elli
                     } else if (isLine() && !( isPoint() || isTriangle() || isSolid() || isWireframe() )) {
                         bufferGeometry = new BufferGeometry(false, true, false, false, false);
                     } else if (isTriangle() && !( isLine() || isPoint() || isSolid() || isWireframe() )) {
-                        if ( (geo instanceof Random_Triangle)
+                        if ((geo instanceof Random_Triangle)
                             || (geo instanceof Ellipsoid_withObjFilling)
                             || (geo instanceof Random)) {
                             bufferGeometry = new BufferGeometry(false, false, true, false, false);
@@ -453,14 +472,14 @@ define(["jquery", "BufferGeometry", "random", "band", "parametricSurface", "elli
                             alert("Dieses Material ist für diese Geometrie nicht dacht!");
                         }
                     } else if (isWireframe() && !( isLine() || isTriangle() || isPoint() || isSolid() )) {
-                        if ( (geo instanceof ParametricSurface) || (geo instanceof Band) ) {
+                        if ((geo instanceof ParametricSurface) || (geo instanceof Band)) {
                             bufferGeometry = new BufferGeometry(false, false, false, false, true);
                             bufferGeometry.setIndex(geo.getIndices());
                         } else {
                             alert("Dieses Material ist für diese Geometrie nicht dacht!");
                         }
-                    } else if (isWireframe() && isSolid() && !( isLine() || isTriangle() || isPoint() )){
-                        if ( (geo instanceof ParametricSurface) || (geo instanceof Band) ) {
+                    } else if (isWireframe() && isSolid() && !( isLine() || isTriangle() || isPoint() )) {
+                        if ((geo instanceof ParametricSurface) || (geo instanceof Band)) {
                             bufferGeometry = new BufferGeometry(false, false, false, true, true);
                             bufferGeometry.setIndex(geo.getIndices());
                         } else {
@@ -515,17 +534,6 @@ define(["jquery", "BufferGeometry", "random", "band", "parametricSurface", "elli
                 return !!$('#wireframe').attr('checked');
             };
 
-            var isDayTex = function () {
-                return !!$('#texDay').attr('checked');
-            };
-
-            var isNightTex = function () {
-                return !!$('#texNight').attr('checked');
-            };
-
-            var isClouds = function () {
-                return !!$('#cloud').attr('checked');
-            };
             // return the constructor function
         }
 

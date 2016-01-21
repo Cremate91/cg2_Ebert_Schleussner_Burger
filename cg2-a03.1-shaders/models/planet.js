@@ -1,6 +1,6 @@
 /* requireJS module definition */
-define(["three", "shaders"],
-    (function (THREE, Shaders) {
+define(["three", "shaders", "jquery"],
+    (function (THREE, Shaders, $) {
 
         "use strict";
 
@@ -15,22 +15,24 @@ define(["three", "shaders"],
             var nightTexture = loader.load('textures/earth_at_night_2048.jpg');
             var clouds = loader.load('textures/earth_clouds_2048.jpg');
 
-            // load and create required textures
-
             var scope = this;
-
-            // implement ShaderMaterial using the code from
-            // the lecture
 
             var material = new THREE.ShaderMaterial
             ({
                 uniforms: THREE.UniformsUtils.merge([
                     THREE.UniformsLib['lights'],
                     {
-                        diffuseMaterial: {type: 'c', value: new THREE.Color(1, 0, 0)},
-                        specularMaterial: {type: 'c', value: new THREE.Color(0.7, 0.7, 0.7)},
-                        ambientMaterial: {type: 'c', value: new THREE.Color(0.8, 0.2, 0.2)},
-                        shininessMaterial: {type: 'f', value: 16.0}
+                        diffuseMaterial: {      type: 'c', value: new THREE.Color(1, 0, 0)},
+                        specularMaterial: {     type: 'c', value: new THREE.Color(0.7, 0.7, 0.7)},
+                        ambientMaterial: {      type: 'c', value: new THREE.Color(0.8, 0.2, 0.2)},
+                        shininessMaterial: {    type: 'f', value: 16.0},
+                        daytimeTexture: {       type: 't', value: null},
+                        nighttimeTexture: {     type: 't', value: null},
+                        topographyTexture: {    type: 't', value: null},
+                        cloudTexture: {         type: 't', value: null},
+                        daytimeTextureBool: {   type: 'i', value: 0, needsUpdate: true},
+                        nighttimeTextureBool: { type: 'i', value: 0, needsUpdate: true},
+                        cloudsTextureBool: {    type: 'i', value: 0, needsUpdate: true}
                     }
                 ]),
                 vertexShader: Shaders.getVertexShader("planet"),
@@ -38,25 +40,19 @@ define(["three", "shaders"],
                 lights: true
             });
 
-            // hint:
-            // texture can be assigned only when it is loaded completely, e.g. like this
-            //material.uniforms.daytimeTexture.value = dayTexture;
-            //should stand one or more daytimeTextures?
-            //Is the daytimetexture the representive textures and will be changed in the shader?
-            //material.uniforms.nighttimeTexture.value = nightTexture;
-            //material.uniforms.topographyTexture.value = topoTexture;
-            //material.uniforms.cloudTexture.value = clouds;
+            material.uniforms.daytimeTexture.value       = dayTexture;
+            material.uniforms.nighttimeTexture.value     = nightTexture;
+            material.uniforms.topographyTexture.value    = topoTexture;
+            material.uniforms.cloudTexture.value         = clouds;
 
             scope.mesh = new THREE.Mesh(new THREE.SphereGeometry(400, 100, 100), material);
             scope.mesh.name = "planet";
 
             scope.root.add(scope.mesh);
 
-
             this.getMesh = function () {
                 return this.root;
             };
-
 
         }; // constructor
 

@@ -12,9 +12,9 @@
 
 
 /* requireJS module definition */
-define(["three", "util", "shaders", "BufferGeometry", "random", "band", "parametricSurface", "ellipsoid_withObjFilling",
-    "random_Triangle", "robot", "explosion", "planet"],
-    (function (THREE, util, shaders, BufferGeometry, Random, Band, ParametricSurface, Ellipsoid_withObjFilling,
+define(["jquery", "three", "util", "shaders", "BufferGeometry", "random", "band", "parametricSurface", "ellipsoid_withObjFilling",
+        "random_Triangle", "robot", "explosion", "planet"],
+    (function ($, THREE, util, shaders, BufferGeometry, Random, Band, ParametricSurface, Ellipsoid_withObjFilling,
                Random_Triangle, Robot, Explosion, Planet) {
 
         "use strict";
@@ -41,8 +41,7 @@ define(["three", "util", "shaders", "BufferGeometry", "random", "band", "paramet
             var aLight = new THREE.AmbientLight(0x404040);
             var dlight = new THREE.DirectionalLight(0xffffff, 0.5);
             dlight.name = "dLight";
-            dlight.position.set( -1, -1, -0.3).normalize();
-            //dlight.position.set( 1, 1, 1);
+            dlight.position.set(-1, 0, -0.3).normalize();
 
             this.addLights = function () {
                 scope.scene.add(aLight);
@@ -54,11 +53,12 @@ define(["three", "util", "shaders", "BufferGeometry", "random", "band", "paramet
                 scope.scene.remove(dlight);
             };
 
+            /**
+             * Animations per key (EventListener)
+             */
             // Add a listener for 'keydown' events. By this listener, all key events will be
             // passed to the function 'onDocumentKeyDown'. There's another event type 'keypress'.
             document.addEventListener("keydown", onDocumentKeyDown, false);
-
-
             function onDocumentKeyDown(event) {
                 if (scope.currentMesh != undefined) {
                     // Get the key code of the pressed key
@@ -149,6 +149,97 @@ define(["three", "util", "shaders", "BufferGeometry", "random", "band", "paramet
 
             };
 
+            /**
+             * Animations per Checkbox
+             */
+            var pos = false;
+            var t = 0;
+            this.letAnim = function (anim) {
+                if (scope.currentMesh != undefined) {
+
+                    /**
+                     *  Objects in the scene
+                     */
+                    //Robot-Obj
+                    var roboto = scope.scene.getObjectByName("robot", true);
+                    //Planet-Obj
+                    var p = scope.scene.getObjectByName("planet", true);
+
+                    if (roboto) {
+                        //console.log(roboto.position.x);
+
+                        var nodeLeftEllbow = scope.scene.getObjectByName("armLeftEllbow", true);
+                        var nodeRightEllbow = scope.scene.getObjectByName("armRightEllbow", true);
+                        var nodeLeftLeg = scope.scene.getObjectByName("thighJointLeft", true);
+                        var torso = scope.scene.getObjectByName("torso", true);
+
+                        if (pos) {
+                            roboto.position.x += 10;
+                            nodeLeftEllbow.rotation.x += 0.02;
+                            nodeRightEllbow.rotation.x -= 0.02;
+                            nodeLeftLeg.rotation.x += 0.01;
+                            //torso.scaleX(50);
+                            if (roboto.position.x == 500) {
+                                pos = false;
+                            }
+                        } else {
+                            roboto.position.x -= 10;
+                            nodeLeftEllbow.rotation.x -= 0.02;
+                            nodeRightEllbow.rotation.x += 0.02;
+                            nodeLeftLeg.rotation.x -= 0.01;
+                            if (roboto.position.x == -500) {
+                                pos = true;
+                            }
+                        }
+
+
+                    }
+                    else if (p) {
+
+                        //DirectionalLight
+                        var directionalLight = scope.scene.getObjectByName("dLight", true);
+                        //console.log(directionalLight);
+                        t += 0.01;
+                        if (t == 360) t = 0;
+
+                        //console.log("x : " + Math.sin(directionalLight.position.x));
+                        //console.log("z : " + Math.sin(directionalLight.position.z));
+                        directionalLight.position.x += Math.sin(t) * 300;
+                        directionalLight.position.z += Math.cos(t) * 300;
+
+                    }
+                    else if (anim) {
+
+                        scope.currentMesh.rotation.x += 0.0075;
+                        scope.currentMesh.rotation.y += 0.01;
+
+                    }
+                } else {
+                    console.log("I don´t have an obj!");
+                }
+            };
+
+
+            this.textureUpdate = function (d, n, c, t) {
+                var day = d || false;
+                var night = n || false;
+                var clouds = c || false;
+                var topo = t || false;
+                //console.log("day : " + day);
+                //console.log("night : " + night);
+                //console.log("clouds : " + clouds);
+
+                var p = scope.scene.getObjectByName("planet", true);
+
+                if (p) {
+                    p.material.uniforms.daytimeTextureBool.value = (day) ? 1 : 0;
+                    p.material.uniforms.nighttimeTextureBool.value = (night) ? 1 : 0;
+                    p.material.uniforms.cloudsTextureBool.value = (clouds) ? 1 : 0;
+                }
+                this.draw();
+
+            }
+
             this.addBufferGeometry = function (bufferGeometry) {
 
                 scope.currentMesh = bufferGeometry.getMesh();
@@ -157,48 +248,6 @@ define(["three", "util", "shaders", "BufferGeometry", "random", "band", "paramet
                 this.addLights();
             };
 
-
-
-            var pos = false;
-            this.letAnim = function (anim) {
-                if (scope.currentMesh != undefined) {
-                    var roboto = scope.scene.getObjectByName("robot", true);
-                    var nodeLeftEllbow = scope.scene.getObjectByName("armLeftEllbow", true);
-                    var nodeRightEllbow = scope.scene.getObjectByName("armRightEllbow", true);
-                    var nodeLeftLeg = scope.scene.getObjectByName("thighJointLeft", true);
-                    var torso = scope.scene.getObjectByName("torso", true);
-
-                    if (roboto) {
-                        console.log(roboto.position.x);
-
-                        if (pos) {
-                            roboto.position.x += 10;
-                            nodeLeftEllbow.rotation.x += 0.02;
-                            nodeRightEllbow.rotation.x -= 0.02;
-                            nodeLeftLeg.rotation.x += 0.01;
-                            //torso.scaleX(50);
-                            if(roboto.position.x == 500){
-                                pos = false;
-                            }
-                        } else {
-                            roboto.position.x -=10;
-                            nodeLeftEllbow.rotation.x -= 0.02;
-                            nodeRightEllbow.rotation.x += 0.02;
-                            nodeLeftLeg.rotation.x -= 0.01;
-                            if(roboto.position.x == -500){
-                                pos = true;
-                            }
-                        }
-
-
-                    } else if (anim) {
-                        scope.currentMesh.rotation.x += 0.0075;
-                        scope.currentMesh.rotation.y += 0.01;
-                    }
-                } else {
-                    console.log("I don´t have an obj!");
-                }
-            };
 
             this.removeBufferGeogemtry = function () {
                 if (scope.currentMesh != undefined) {

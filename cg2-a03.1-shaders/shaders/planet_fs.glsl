@@ -13,100 +13,191 @@ uniform vec3 specularMaterial;
 uniform float shininessMaterial;
 
 // uniform sampler2D textures
-
+uniform sampler2D daytimeTexture;
+uniform sampler2D nighttimeTexture;
+uniform sampler2D topographyTexture;
+uniform sampler2D cloudTexture;
 
 // three js only supports int no bool
 // if you want a boolean value in the shader, use int
+uniform int daytimeTextureBool;
+uniform int nighttimeTextureBool;
+uniform int cloudsTextureBool;
 
-
-//Phong Shading
-/*vec3 phong(vec3 p, vec3 v, vec3 n) {
-    if(dot(v,n) < 0.0)
-        return vec3(0,0,0); // back-face
-
-    vec3 color;
-    vec3 diff;
-    vec3 spec;
-
-    vec3 ambi = ambientMaterial * ambientLightColor[0];
-    color += ambi;
-
-    for(int i = 0; i < MAX_DIR_LIGHTS; i++){
-        vec3 toLight = normalize(directionalLightDirection[i] - p);
-        vec3 reflectLight = reflect(-toLight, n);
-
-        //Lambert
-        float ndots = max( dot(toLight,n), 0.0);
-        //specAngle
-        float rdotv = max( dot(reflectLight, v), 0.0);
-
-        //Sum of diffuse color
-        diff += directionalLightColor[i] * ndots;
-        //Sum of specular color
-        spec += directionalLightColor[i] * pow(rdotv, shininessMaterial);
-
-    }
-
-    diff = (diffuseMaterial * diff);
-    spec = (specularMaterial * spec);
-
-    //Phong Shading
-    return color + diff + spec;
-}*/
-
-// data from the vertex shader
+//meins
+////////////////////////////////////////////////////////////////////////////////////////
+/*// data from the vertex shader
 varying vec3 ecPosition; //vec3
 varying vec3 ecNormal; //normalized
 varying vec2 vUv;
 varying vec3 viewDir;
 
 void main() {
+    vec3 v = normalize(viewDir);
 
-    vec3 lightDir = normalize(directionalLightDirection[0] - ecPosition);
-
-    float lambertian = max(dot(lightDir,ecNormal), 0.0);
-    float specular = 0.0;
-
-    if(lambertian > 0.0) {
+    vec3 dayCol = texture2D(daytimeTexture,vUv).rgb;
+    vec3 nightCol = texture2D(nighttimeTexture,vUv).rgb;
+    vec3 topoCol = texture2D(topographyTexture,vUv).rgb;
+    vec3 cloudsCol = texture2D(cloudTexture,vUv).rgb;
+    vec3 toLight = normalize(directionalLightDirection[0] - ecPosition);
+    //Lambert
+    float ndots = max(dot(toLight,ecNormal), 0.0);
+    float phong = 0.0;
+    //Phong
+    if(ndots > 0.0) {
        //without blinn phong
-//       vec3 reflectDir = reflect(-lightDir, ecNormal);
+//       vec3 reflectDir = reflect(-toLight, ecNormal);
 //       float specAngle = max(dot(reflectDir, viewDir), 0.0);
        //with blinn phong
-       vec3 halfDir = normalize(lightDir + viewDir);
+       vec3 halfDir = normalize(toLight + v);
        float specAngle = max(dot(halfDir, ecNormal), 0.0);
-       specular = pow(specAngle, 16.0);
+
+       phong = pow(specAngle, shininessMaterial);
     }
-    //complete phong shader
-    gl_FragColor = vec4(ambientMaterial*ambientLightColor[0] +
-                      lambertian*diffuseMaterial*directionalLightColor[0] +
-                      specular*directionalLightColor[0], 1.0);
+    vec3 ambient, diffuse, specular;
+    for(int i = 0; i < MAX_DIR_LIGHTS; i++){
+        diffuse += ndots * directionalLightColor[i];
+        specular += phong * directionalLightColor[i];
+    }
 
-    //only ambient
-//     gl_FragColor = vec4(ambientMaterial * ambientLightColor[0], 1.0);
-    //only diffuse
-//     gl_FragColor = vec4(lambertian*diffuseMaterial * directionalLightColor[0], 1.0);
-    //only specular
-//     gl_FragColor = vec4(specular*specularMaterial, 1.0);
+    vec3 l = normalize(directionalLightDirection[0]);
+    float ndotl = max( dot(l, ecNormal), 0.0 );
+//    diffuse  = diffuse*ndotl;
 
-    //Only use, if the phong-method is used
-    // vec3 color = phong(ecPosition.xyz, viewDir, ecNormal);
-    // gl_FragColor = vec4(color, 1.0);
+    ambient  *= ambientLightColor[0];
+    ambient  *= (nighttimeTextureBool == 1 && cloudsTextureBool == 0)? nightCol : ambientMaterial;
+    ambient  *= (cloudsTextureBool == 1 && nighttimeTextureBool == 0)? cloudsCol: ambientMaterial;
+    ambient  *= (cloudsTextureBool == 1 && nighttimeTextureBool == 1)? nightCol*cloudsCol: vec3(1,1,1);
 
+    diffuse  = (daytimeTextureBool == 1)? diffuse*ndotl+dayCol : diffuse*diffuseMaterial;
+
+    specular = specularMaterial * phong * directionalLightColor[0];
+
+    vec3 color = ambient + diffuse + specular;
+//    vec3 color = ambient;
+//    vec3 color = diffuse;
+//    vec3 color = specular;
+
+//    color = pow(color, vec3(0.6))*2.0;
+    gl_FragColor = vec4(color, 1.0);
+//    gl_FragColor = vec4(vec3(daytimeTextureBool, daytimeTextureBool, daytimeTextureBool) , 1.0);
 }
+////////////////////////////////////////////////////////////////////////////////////////
+*/
+//meins Ende
 
-//    //1.
-//    // get color from different textures
-//    //vec3 color = texture2D(textureUniform, texCoord).rgb;
-//
-//    //2.
-//    //normalize normal after projection
-//    //3.
-//    //do we use a perspective or an orthogonal projection matrix?
-//    //bool usePerspective = projectionMatrix[2][3] != 0.0;
-//    //for perspective mode, the viewing direction (in eye coords) points
-//    //from the vertex to the origin (0,0,0) --> use -ecPosition as direction.
-//    //for orthogonal mode, the viewing direction is simply (0,0,1)
-//
+
+////////////////////////////////////////////////////////////////////////////////////////
+// data from the vertex shader
+varying vec4 ecPosition;
+varying vec3 ecNormal;
+varying vec2 vUv;
+//varying vec3 viewDir;
+varying mat4 projectionMat;
+varying mat4 normalMat;
+
+void main(){
+    bool usePerspective = projectionMat[2][3] != 0.0;
+    vec3 viewDir = usePerspective ? vec3(0, 0, 1) : normalize(-ecPosition.xyz);
+
+    vec3 normal = normalize(ecNormal);
+
+    vec3 dayCol    = texture2D(daytimeTexture, vUv).rgb;
+    vec3 nightCol  = texture2D(nighttimeTexture, vUv).rgb;
+    vec3 cloudsCol = texture2D(cloudTexture, vUv).rgb;
+
+    if(dot(viewDir, normal) < 0.0){
+        gl_FragColor = vec4(vec3(0,0,0), 1.0); // back-face
+    } else {
+        vec3 ambient, diffuse, specular;
+
+//        vec3 toLight = normalize(directionalLightDirection[0] - ecPosition.xyz);
+//        vec3 reflectLight = reflect(-toLight, normal);
+        vec3 reflectLight = reflect(-directionalLightDirection[0], normal);
+        float ndots = max( dot(directionalLightDirection[0],normal), 0.0);
+        //normal phong
+        float rdotv = max( dot(reflectLight, viewDir), 0.0);
+        //blinn phong
+        vec3 h = (viewDir + directionalLightDirection[0]) / abs( (viewDir + directionalLightDirection[0]) );
+        float ndoth = max( dot(h, normal), 0.0 );
+
+        vec3 diffuseCoeff;
+        if(daytimeTextureBool == 1) {
+            ambient = ambientLightColor[0];
+            diffuseCoeff = dayCol;
+            // clouds at day?
+            if(cloudsTextureBool == 1 && nighttimeTextureBool == 0) {
+                ambient = cloudsCol * ambientLightColor[0];
+                diffuseCoeff = (1.0-cloudsCol)*diffuseCoeff + cloudsCol*vec3(1,1,1);
+            }
+            if(nighttimeTextureBool == 1 && cloudsTextureBool == 0){
+                ambient = nightCol * ambientLightColor[0];
+            }
+            if(nighttimeTextureBool == 1 && cloudsTextureBool == 1){
+                ambient = nightCol * cloudsCol * ambientLightColor[0];
+                diffuseCoeff = (1.0-cloudsCol)*diffuseCoeff + cloudsCol*vec3(1,1,1);
+            }
+        } else {
+            ambient = ambientMaterial * ambientLightColor[0];
+            diffuseCoeff = diffuseMaterial;
+        }
+
+        vec3 l = normalize(directionalLightDirection[0]);
+        float ndotl = max( dot(l, normal), 0.0 );
+//        ambient = (ndotl == 1.0)? vec3(0,0,0) : ambient;
+        // final diffuse term for daytime
+        diffuse = diffuseCoeff * ndotl * directionalLightColor[0];
+        specular = specularMaterial * pow( rdotv, shininessMaterial ) * directionalLightColor[0];
+
+        diffuse = pow(diffuse, vec3(0.6))*2.0;
+
+        vec3 color = ambient + diffuse + specular;
+        gl_FragColor = vec4(color, 1.0);
+    }
+}
+////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+////    // diffuse contribution
+////    vec3 diffuseCoeff = (daytimeTextureBool == 1)? dayCol : diffuseMaterial;
+////    // clouds at day?
+////    if(cloudsTextureBool == 1) {
+////        diffuseCoeff = (1.0-cloudsCol)*diffuseCoeff + cloudsCol*vec3(1,1,1);
+////    }
+
+////    vec3 l = normalize(directionalLightDirection[0]);
+////    float ndotl = max( dot(l, ecNormal), 0.0 );
+
+//    // final diffuse term for daytime
+////    diffuse =  diffuse * diffuseCoeff * ndotl;
+
 //    //4.
 //    // calculate color using phong illumination
 //    // depending on GUI checkbox:

@@ -11,6 +11,10 @@ define(["jquery", "three", "shaders"],
 
             var scope = this;
 
+
+            var loader = new THREE.TextureLoader();
+            var topoTexture = loader.load('textures/explosion.png');
+
             // load explosion texture
             //
             // Loading textures is asynchronous. That means you the load function
