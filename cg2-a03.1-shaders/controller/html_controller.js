@@ -401,9 +401,12 @@ define(["jquery", "BufferGeometry", "random", "band", "parametricSurface", "elli
             $('#cloud').click((function () {
                 textureUpdate();
             }));
+            $('#texTopo').click((function () {
+                textureUpdate();
+            }));
 
             var textureUpdate = function () {
-                scene.textureUpdate(isDayTex(), isNightTex(), isClouds());
+                scene.textureUpdate(isDayTex(), isNightTex(), isClouds(), isTopo());
             };
 
             var isDayTex = function () {
@@ -416,6 +419,10 @@ define(["jquery", "BufferGeometry", "random", "band", "parametricSurface", "elli
 
             var isClouds = function () {
                 return !!$('#cloud').attr('checked');
+            };
+
+            var isTopo = function () {
+                return !!$('#texTopo').attr('checked');
             };
 
             $("#anim").click((function () {

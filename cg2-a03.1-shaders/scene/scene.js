@@ -153,7 +153,7 @@ define(["jquery", "three", "util", "shaders", "BufferGeometry", "random", "band"
              * Animations per Checkbox
              */
             var pos = false;
-            var t = 0;
+            var t = -89.8;
             this.letAnim = function (anim) {
                 if (scope.currentMesh != undefined) {
 
@@ -198,14 +198,12 @@ define(["jquery", "three", "util", "shaders", "BufferGeometry", "random", "band"
 
                         //DirectionalLight
                         var directionalLight = scope.scene.getObjectByName("dLight", true);
-                        //console.log(directionalLight);
                         t += 0.01;
                         if (t == 360) t = 0;
 
-                        //console.log("x : " + Math.sin(directionalLight.position.x));
-                        //console.log("z : " + Math.sin(directionalLight.position.z));
-                        directionalLight.position.x += Math.sin(t) * 300;
-                        directionalLight.position.z += Math.cos(t) * 300;
+                        directionalLight.position.x = Math.sin(t);
+                        directionalLight.position.z = Math.cos(t);
+                        p.rotation.y -= 0.001;
 
                     }
                     else if (anim) {
@@ -235,6 +233,7 @@ define(["jquery", "three", "util", "shaders", "BufferGeometry", "random", "band"
                     p.material.uniforms.daytimeTextureBool.value = (day) ? 1 : 0;
                     p.material.uniforms.nighttimeTextureBool.value = (night) ? 1 : 0;
                     p.material.uniforms.cloudsTextureBool.value = (clouds) ? 1 : 0;
+                    p.material.uniforms.topoTextureBool.value = (topo) ? 1 : 0;
                 }
                 this.draw();
 

@@ -33,7 +33,6 @@ void main() {
     ecPosition = modelViewMatrix * vec4(position, 1.0);
     gl_Position = projectionMatrix * ecPosition;
 
-    ecNormal = normal;
     vUv = uv;
     projectionMat = projectionMatrix;
     ecNormal = normalMatrix * normal;

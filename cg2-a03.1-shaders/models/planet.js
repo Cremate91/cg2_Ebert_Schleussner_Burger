@@ -32,7 +32,9 @@ define(["three", "shaders", "jquery"],
                         cloudTexture: {         type: 't', value: null},
                         daytimeTextureBool: {   type: 'i', value: 0, needsUpdate: true},
                         nighttimeTextureBool: { type: 'i', value: 0, needsUpdate: true},
-                        cloudsTextureBool: {    type: 'i', value: 0, needsUpdate: true}
+                        cloudsTextureBool: {    type: 'i', value: 0, needsUpdate: true},
+                        topoTextureBool: {      type: 'i', value: 0, needsUpdate: true}
+
                     }
                 ]),
                 vertexShader: Shaders.getVertexShader("planet"),
