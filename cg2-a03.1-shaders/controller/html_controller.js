@@ -384,22 +384,25 @@ define(["jquery", "BufferGeometry", "random", "band", "parametricSurface", "elli
                 scene.addBufferGeometry(robo);
             }));
 
-            $('#freqScale').addEventListener("keydown", expolosionUpdate, false);
-            $('#colorScale').addEventListener("keydown", expolosionUpdate, false);
-            $('#weight').addEventListener("keydown", expolosionUpdate, false);
+            document.addEventListener("keydown", expolosionUpdate, false);
+            //document.addEventListener("keydown", expolosionUpdate, false);
+            //document.addEventListener("keydown", expolosionUpdate, false);
 
             function expolosionUpdate(event){
-                var keyCode = event.which;
-                if(keyCode == 13){
-                    var freqScale = parseFloat($("#freqScale").attr("value"));
-                    var colScale = parseFloat($("#colorScale").attr("value"));
-                    var weight = parseFloat($("#weight").attr("value"));
-                    console.log("Frequency Scale : " + freqScale);
-                    console.log("Color Scale     : " + colScale);
-                    console.log("Weight          : " + weight);
+                if($("#explosion").is(":visible") ) {
+                    var keyCode = event.which;
+                    if(keyCode == 13){
+                        var freqScale = parseFloat($("#freqScale").attr("value"));
+                        var colScale = parseFloat($("#colorScale").attr("value"));
+                        var weight = parseFloat($("#weight").attr("value"));
+                        console.log("Frequency Scale : " + freqScale);
+                        console.log("Color Scale     : " + colScale);
+                        console.log("Weight          : " + weight);
 
-                    scene.explosionUpdate(weight, colScale, freqScale);
+                        scene.explosionUpdate(weight, colScale, freqScale);
+                    }
                 }
+
             }
 
             $('#texDay').click((function () {
