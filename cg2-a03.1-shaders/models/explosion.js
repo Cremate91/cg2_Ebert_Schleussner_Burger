@@ -13,7 +13,17 @@ define(["jquery", "three", "shaders"],
 
 
             var loader = new THREE.TextureLoader();
-            var topoTexture = loader.load('textures/explosion.png');
+            var exploTexture = loader.load('textures/explosion.png',
+                function(texture){  //success
+                    return texture
+                },
+                function(xhr){      //loaded
+                    console.log( (xhr.loaded / xhr.total * 100) +" % loaded" );
+                },
+                function(xhr){      //error
+                    console.log( "An error happened.." );
+                }
+            );
 
             // load explosion texture
             //
@@ -40,25 +50,23 @@ define(["jquery", "three", "shaders"],
             //        fragmentShader: Shaders.getFragmentShader("explosion")
             //    } );
 
-            //var startTime = Date.now();
-            //var material = new THREE.ShaderMaterial({
-            //        uniforms: {
-                        //explosionTex: {type: 't', THREE.ImageUtils.loadTexture('../textures/explosion.png')},
-                        //time: {type: 'f', 0.00035 * ( Date.now() - startTime ) }
-                        //weight: ... aka displacement weight - how strong is the displacement
-                        //freqScale: ... frequency of the noise f < 0 = only low frequency noise, f > 0 more and more high frequency noise
-                        //               comes on
-                        //colorScale: ... rescales the access positioning into the explosion textures (high value = lighter color, low value = darker color)
-                    //},
-                    //vertexShader: Shaders.getVertexShader("explosion"),
-                    //fragmentShader: Shaders.getFragmentShader("explosion")
-                //}
-            //);
+            var material = new THREE.ShaderMaterial({
+                    uniforms: {
+                        explosionTex: { type: 't', value: exploTexture},
+                        time: {         type: 'f', value: 0.0 },
+                        weight: {       type: 'f', value: 0.0, needsUpdate: true},
+                        freqScale: {    type: 'f', value: 0.0, needsUpdate: true},
+                        colorScale: {   type: 'f', value: 0.0, needsUpdate: true}
+                    },
+                    vertexShader: Shaders.getVertexShader("explosion"),
+                    fragmentShader: Shaders.getFragmentShader("explosion")
+                }
+            );
 
-            var material = new THREE.PointsMaterial({
-                color: 0xaaaaaa,
-                size: 10, vertexColors: THREE.VertexColors
-            });
+            //var material = new THREE.PointsMaterial({
+            //    color: 0xaaaaaa,
+            //    size: 10, vertexColors: THREE.VertexColors
+            //});
 
             scope.mesh = new THREE.Mesh(new THREE.SphereGeometry(300, 50, 50), material);
             scope.mesh.name = "explosion";

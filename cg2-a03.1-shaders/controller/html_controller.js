@@ -193,16 +193,9 @@ define(["jquery", "BufferGeometry", "random", "band", "parametricSurface", "elli
 
             $("#btnNewExplosion").click((function () {
 
-                var freqScale = parseFloat($("#freqScale").attr("value"));
-                var colScale = parseFloat($("#colorScale").attr("value"));
-                var weight = parseFloat($("#weight").attr("value"));
-                console.log("Frequency Scale : " + freqScale);
-                console.log("Color Scale     : " + colScale);
-                console.log("Weight          : " + weight);
-
-
                 var explosion = new Explosion(scene);
                 scene.addBufferGeometry(explosion);
+
             }));
 
             $("#btnNewPlanet").click((function () {
@@ -391,6 +384,23 @@ define(["jquery", "BufferGeometry", "random", "band", "parametricSurface", "elli
                 scene.addBufferGeometry(robo);
             }));
 
+            $('#freqScale').addEventListener("keydown", expolosionUpdate, false);
+            $('#colorScale').addEventListener("keydown", expolosionUpdate, false);
+            $('#weight').addEventListener("keydown", expolosionUpdate, false);
+
+            function expolosionUpdate(event){
+                var keyCode = event.which;
+                if(keyCode == 13){
+                    var freqScale = parseFloat($("#freqScale").attr("value"));
+                    var colScale = parseFloat($("#colorScale").attr("value"));
+                    var weight = parseFloat($("#weight").attr("value"));
+                    console.log("Frequency Scale : " + freqScale);
+                    console.log("Color Scale     : " + colScale);
+                    console.log("Weight          : " + weight);
+
+                    scene.explosionUpdate(weight, colScale, freqScale);
+                }
+            }
 
             $('#texDay').click((function () {
                 textureUpdate();

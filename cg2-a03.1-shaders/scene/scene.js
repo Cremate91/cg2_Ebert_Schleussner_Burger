@@ -217,6 +217,20 @@ define(["jquery", "three", "util", "shaders", "BufferGeometry", "random", "band"
                 }
             };
 
+            this.explosionUpdate = function(w, c, f){
+                var weight = w || 0.0;
+                var color  = c || 0.0;
+                var freq   = f || 0.0;
+
+                var p = scope.scene.getObjectByName("explosion", true);
+
+                if (p) {
+                    p.material.uniforms.freqScale.value = freq;
+                    p.material.uniforms.colorScale.value = color;
+                    p.material.uniforms.weight.value = weight;
+                }
+                this.draw();
+            };
 
             this.textureUpdate = function (d, n, c, t) {
                 var day = d || false;
@@ -237,7 +251,7 @@ define(["jquery", "three", "util", "shaders", "BufferGeometry", "random", "band"
                 }
                 this.draw();
 
-            }
+            };
 
             this.addBufferGeometry = function (bufferGeometry) {
 
