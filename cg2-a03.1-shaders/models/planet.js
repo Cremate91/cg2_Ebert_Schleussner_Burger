@@ -10,10 +10,42 @@ define(["three", "shaders", "jquery"],
             this.root = new THREE.Object3D();
 
             var loader = new THREE.TextureLoader();
-            var topoTexture = loader.load('textures/earth_topography_2048.jpg');
-            var dayTexture = loader.load('textures/earth_month04.jpg');
-            var nightTexture = loader.load('textures/earth_at_night_2048.jpg');
-            var clouds = loader.load('textures/earth_clouds_2048.jpg');
+            var topoTexture = loader.load('textures/earth_topography_2048.jpg',
+                function (texture) {
+                    return texture;
+                }, function(xhr){
+                    console.log( (xhr.loaded / xhr.total * 100) + '% loaded' );
+                }, function(xhr){
+                    console.log( 'An error happened' );
+                }
+            );
+            var dayTexture = loader.load('textures/earth_month04.jpg',
+                function (texture) {
+                    return texture;
+                }, function(xhr){
+                    console.log( (xhr.loaded / xhr.total * 100) + '% loaded' );
+                }, function(xhr){
+                    console.log( 'An error happened' );
+                }
+            );
+            var nightTexture = loader.load('textures/earth_at_night_2048.jpg',
+                function (texture) {
+                    return texture;
+                }, function(xhr){
+                    console.log( (xhr.loaded / xhr.total * 100) + '% loaded' );
+                }, function(xhr){
+                    console.log( 'An error happened' );
+                }
+            );
+            var clouds = loader.load('textures/earth_clouds_2048.jpg',
+                function (texture) {
+                    return texture;
+                }, function(xhr){
+                    console.log( (xhr.loaded / xhr.total * 100) + '% loaded' );
+                }, function(xhr){
+                    console.log( 'An error happened' );
+                }
+            );
 
             var scope = this;
 
