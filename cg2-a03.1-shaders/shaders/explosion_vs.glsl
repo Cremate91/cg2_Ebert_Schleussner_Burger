@@ -1,7 +1,7 @@
 
 // we need two varying variables
-//varying 
-//varying 
+varying float noise;
+varying vec2 vUv;
 
 
 uniform float time;
@@ -146,11 +146,12 @@ float noise3D( vec3 p ) {
 
 void main() {
 
+
     // compute noise:
     // compute noise value using noise3d which is parameterized by a vec3, e.g.
     // a normal (scaled by a scalar controlling the frequency - high, low frequencies)
     // when adding a uniform variable 'time' to that value it is getting animated
-    
+    noise =  noise3D(freqScale * normal + time);
     // Hint: the result of noise is used for the displacement and the access into the 
     // texture in the fragment shader
 
@@ -158,12 +159,12 @@ void main() {
     // compute new position as a displacement of the sphere vertex position
     // plus its normal scaled by displacement value
     // transform the output correctly
-
+    vec3 newPosition = position * noise + position + normal ;
     // assign varying variables for vertex shader
-    // 
 
+    vUv = uv;
 
-    // vec3 displacedPosition = ...
-    // gl_Position = ...
+    gl_Position = projectionMatrix * modelViewMatrix * vec4(newPosition, 1.0);
+
 
 }

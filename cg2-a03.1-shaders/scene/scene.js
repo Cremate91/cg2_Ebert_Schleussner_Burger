@@ -34,6 +34,8 @@ define(["jquery", "three", "util", "shaders", "BufferGeometry", "random", "band"
             //z =  Abstand der Camera zum "Anfang der Camera"
             scope.camera.position.z = 1000;
             scope.scene = new THREE.Scene();
+            var start = Date.now();
+
 
             /**
              *  Lights
@@ -56,8 +58,8 @@ define(["jquery", "three", "util", "shaders", "BufferGeometry", "random", "band"
             /**
              * Animations per key (EventListener)
              */
-            // Add a listener for 'keydown' events. By this listener, all key events will be
-            // passed to the function 'onDocumentKeyDown'. There's another event type 'keypress'.
+                // Add a listener for 'keydown' events. By this listener, all key events will be
+                // passed to the function 'onDocumentKeyDown'. There's another event type 'keypress'.
             document.addEventListener("keydown", onDocumentKeyDown, false);
             function onDocumentKeyDown(event) {
                 if (scope.currentMesh != undefined) {
@@ -164,7 +166,7 @@ define(["jquery", "three", "util", "shaders", "BufferGeometry", "random", "band"
                     var roboto = scope.scene.getObjectByName("robot", true);
                     //Planet-Obj
                     var p = scope.scene.getObjectByName("planet", true);
-
+                    var expo = scope.scene.getObjectByName("explosion", true);
                     if (roboto) {
                         //console.log(roboto.position.x);
 
@@ -205,6 +207,8 @@ define(["jquery", "three", "util", "shaders", "BufferGeometry", "random", "band"
                         directionalLight.position.z = Math.cos(t);
                         p.rotation.y -= 0.001;
 
+                    } else if (expo) {
+                        //console.log("hier");
                     }
                     else if (anim) {
 
@@ -217,10 +221,10 @@ define(["jquery", "three", "util", "shaders", "BufferGeometry", "random", "band"
                 }
             };
 
-            this.explosionUpdate = function(w, c, f){
+            this.explosionUpdate = function (w, c, f) {
                 var weight = w || 0.0;
-                var color  = c || 0.0;
-                var freq   = f || 0.0;
+                var color = c || 0.0;
+                var freq = f || 0.0;
 
                 var p = scope.scene.getObjectByName("explosion", true);
 
@@ -275,7 +279,11 @@ define(["jquery", "three", "util", "shaders", "BufferGeometry", "random", "band"
              * drawing the scene
              */
             this.draw = function () {
+                var expo = scope.scene.getObjectByName("explosion", true);
+                if (expo != null) {
 
+                    expo.material.uniforms.time.value = 0.00035 * (Date.now() - start);
+                }
                 requestAnimFrame(scope.draw);
 
                 scope.renderer.render(scope.scene, scope.camera);
