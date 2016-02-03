@@ -83,7 +83,8 @@ void main(){
 //                ambient = (ndotl == 1.0)? vec3(0,0,0) : dayCol;
                 diffuseCoeff = topoCol;
             }
-            ambient = (ndotl == 1.0)? vec3(0,0,0) : ambient;
+//            ambient = (ndotl == 1.0)? vec3(0,0,0) : ambient;
+            ambient = (1.0-ndotl) * ambient;
         } else {
             ambient      = ambientMaterial;
             diffuseCoeff = diffuseMaterial;

@@ -33,7 +33,8 @@ requirejs.config({
         "BufferGeometry" : "./scene/buffer_geometry",
         "HtmlController": "./controller/html_controller",
         "planet": "./models/planet",
-        "explosion": "./models/explosion"
+        "explosion": "./models/explosion",
+        "environment": "./models/environment"
     },
     shim: {
         three: {

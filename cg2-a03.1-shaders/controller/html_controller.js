@@ -12,9 +12,9 @@
 
 /* requireJS module definition */
 define(["jquery", "BufferGeometry", "random", "band", "parametricSurface", "ellipsoid_withObjFilling",
-        "random_Triangle", "robot", "explosion", "planet"],
+        "random_Triangle", "robot", "explosion", "planet", "environment"],
     (function ($, BufferGeometry, Random, Band, ParametricSurface, Ellipsoid_withObjFilling,
-               Random_Triangle, Robot, Explosion, Planet) {
+               Random_Triangle, Robot, Explosion, Planet, Environment) {
         "use strict";
 
         /*
@@ -35,6 +35,7 @@ define(["jquery", "BufferGeometry", "random", "band", "parametricSurface", "elli
             $("#material").show();
             $("#explosion").hide();
             $("#planet").hide();
+            $('#env').hide();
 
             $("#btnRandom").click((function () {
                 $("#random").show();
@@ -49,6 +50,7 @@ define(["jquery", "BufferGeometry", "random", "band", "parametricSurface", "elli
                 $("#material").show();
                 $("#explosion").hide();
                 $("#planet").hide();
+                $('#env').hide();
             }));
             $("#btnBand").click((function () {
                 $("#random").hide();
@@ -63,6 +65,7 @@ define(["jquery", "BufferGeometry", "random", "band", "parametricSurface", "elli
                 $("#material").show();
                 $("#explosion").hide();
                 $("#planet").hide();
+                $('#env').hide();
             }));
             $("#btnParametricSurface").click((function () {
                 $("#random").hide();
@@ -77,6 +80,7 @@ define(["jquery", "BufferGeometry", "random", "band", "parametricSurface", "elli
                 $("#material").show();
                 $("#explosion").hide();
                 $("#planet").hide();
+                $('#env').hide();
             }));
             $("#btnEllipsoid").click((function () {
                 $("#random").hide();
@@ -91,6 +95,7 @@ define(["jquery", "BufferGeometry", "random", "band", "parametricSurface", "elli
                 $("#material").show();
                 $("#explosion").hide();
                 $("#planet").hide();
+                $('#env').hide();
             }));
             $("#btnEllipsoidWithFill").click((function () {
                 $("#random").hide();
@@ -105,6 +110,7 @@ define(["jquery", "BufferGeometry", "random", "band", "parametricSurface", "elli
                 $("#material").show();
                 $("#explosion").hide();
                 $("#planet").hide();
+                $('#env').hide();
             }));
             $("#btnCustomRandom").click((function () {
                 $("#random").hide();
@@ -119,6 +125,7 @@ define(["jquery", "BufferGeometry", "random", "band", "parametricSurface", "elli
                 $("#material").show();
                 $("#explosion").hide();
                 $("#planet").hide();
+                $('#env').hide();
             }));
             $("#btnDinis").click((function () {
                 $("#random").hide();
@@ -133,6 +140,7 @@ define(["jquery", "BufferGeometry", "random", "band", "parametricSurface", "elli
                 $("#material").show();
                 $("#explosion").hide();
                 $("#planet").hide();
+                $('#env').hide();
             }));
             $("#btnTranguloidTrefoil").click((function () {
                 $("#random").hide();
@@ -147,6 +155,7 @@ define(["jquery", "BufferGeometry", "random", "band", "parametricSurface", "elli
                 $("#material").show();
                 $("#explosion").hide();
                 $("#planet").hide();
+                $('#env').hide();
             }));
             $("#btnRobot").click((function () {
                 $("#random").hide();
@@ -161,6 +170,7 @@ define(["jquery", "BufferGeometry", "random", "band", "parametricSurface", "elli
                 $("#material").hide();
                 $("#explosion").hide();
                 $("#planet").hide();
+                $('#env').hide();
             }));
             $("#btnExplosion").click((function () {
                 $("#random").hide();
@@ -175,6 +185,7 @@ define(["jquery", "BufferGeometry", "random", "band", "parametricSurface", "elli
                 $("#material").hide();
                 $("#explosion").show();
                 $("#planet").hide();
+                $('#env').hide();
             }));
             $("#btnPlanet").click((function () {
                 $("#random").hide();
@@ -189,24 +200,45 @@ define(["jquery", "BufferGeometry", "random", "band", "parametricSurface", "elli
                 $("#material").hide();
                 $("#explosion").hide();
                 $("#planet").show();
+                $('#env').hide();
+            }));
+            $("#btnEnv").click((function () {
+                $("#random").hide();
+                $("#band").hide();
+                $("#parametricSurface").hide();
+                $("#dinisSurface").hide();
+                $("#tranguloidTrefoil").hide();
+                $("#ellipsoidWithFill").hide();
+                $("#ellipsoid").hide();
+                $("#customRandom").hide();
+                $("#robot").hide();
+                $("#material").hide();
+                $("#explosion").hide();
+                $("#planet").hide();
+                $('#env').show();
+            }));
+
+            $("#btnNewEnv").click((function() {
+                var env = new Environment();
+                scene.addBufferGeometry(env);
             }));
 
             $("#btnNewExplosion").click((function () {
 
+                var explosion = new Explosion(scene);
+                scene.addBufferGeometry(explosion);
 
                 var freqScale = parseFloat($("#freqScale").attr("value"));
                 var colScale = parseFloat($("#colorScale").attr("value"));
                 var weight = parseFloat($("#weight").attr("value"));
-                var explosion = new Explosion(freqScale, colScale, weight);
 
-                scene.addBufferGeometry(explosion);
+                scene.explosionUpdate(weight, colScale, freqScale);
+
             }));
 
             $("#btnNewPlanet").click((function () {
 
                 var planet = new Planet();
-
-
                 scene.addBufferGeometry(planet);
 
             }));
@@ -391,20 +423,24 @@ define(["jquery", "BufferGeometry", "random", "band", "parametricSurface", "elli
             }));
 
             document.addEventListener("keydown", expolosionUpdate, false);
+            //document.addEventListener("keydown", expolosionUpdate, false);
+            //document.addEventListener("keydown", expolosionUpdate, false);
 
+            function expolosionUpdate(event){
+                if($("#explosion").is(":visible") ) {
+                    var keyCode = event.which;
+                    if(keyCode == 13){
+                        var freqScale = parseFloat($("#freqScale").attr("value"));
+                        var colScale = parseFloat($("#colorScale").attr("value"));
+                        var weight = parseFloat($("#weight").attr("value"));
+                        //console.log("Frequency Scale : " + freqScale);
+                        //console.log("Color Scale     : " + colScale);
+                        //console.log("Weight          : " + weight);
 
-            function expolosionUpdate(event) {
-                var keyCode = event.which;
-                if (keyCode == 13) {
-                    var freqScale = parseFloat($("#freqScale").attr("value"));
-                    var colScale = parseFloat($("#colorScale").attr("value"));
-                    var weight = parseFloat($("#weight").attr("value"));
-                    //console.log("Frequency Scale : " + freqScale);
-                    //console.log("Color Scale     : " + colScale);
-                    //console.log("Weight          : " + weight);
-
-                    scene.explosionUpdate(weight, colScale, freqScale);
+                        scene.explosionUpdate(weight, colScale, freqScale);
+                    }
                 }
+
             }
 
             $('#texDay').click((function () {
@@ -427,21 +463,19 @@ define(["jquery", "BufferGeometry", "random", "band", "parametricSurface", "elli
             var isDayTex = function () {
                 return !!$('#texDay').attr('checked');
             };
-
             var isNightTex = function () {
                 return !!$('#texNight').attr('checked');
             };
-
             var isClouds = function () {
                 return !!$('#cloud').attr('checked');
             };
-
             var isTopo = function () {
                 return !!$('#texTopo').attr('checked');
             };
 
             $("#anim").click((function () {
                 if ($("#anim").attr('checked')) {
+
                     animate();
                     //console.log("start");
                 } else {
